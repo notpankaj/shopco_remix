@@ -1,0 +1,29 @@
+.container {
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 396px) {
+  .container {
+    height: 250px;
+  }
+}
+
+@media (min-width: 743px) {
+  .container {
+    display: flex;
+    flex-direction: row;
+    height: 200px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section_a {
+    flex: 1;
+    max-width: 470px;
+  }
+  .section_b {
+    flex: 1;
+    max-width: 380px;
+  }
+}

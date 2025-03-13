@@ -1,9 +1,11 @@
 import { FaTwitter } from "react-icons/fa";
 import { FaInstagram, FaGithub, FaFacebookF } from "react-icons/fa6";
+import Newsletter from "../Newsletter";
 
 const Footer = () => {
   return (
-    <div className="bg-[var(--bg-thrid)] mt-[100px] py-[50px] px-[15px] pl-[30px] md:px-[8%] flex flex-col  ">
+    <div className="relative bg-[var(--bg-thrid)] mt-[300px]  py-[50px] px-[15px] pt-[100px] pl-[30px] md:px-[8%] flex flex-col  ">
+      <Newsletter />
       <div className="flex flex-col sm:flex-row border-b-1 border-b-[lightgrey] pb-[30px] 2xl:pb-[40px]">
         <section>
           <h2 className="heading text-[2rem]">SHOP.CO</h2>
