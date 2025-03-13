@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import withSuspense from "~/hooks/withSuspense";
 
-const BrandSlider = () => {
+const HighlightReviews = () => {
   const settings = {
     dots: false,
     infinite: true,
@@ -57,4 +57,4 @@ const BrandSlider = () => {
   );
 };
 
-export default withSuspense(BrandSlider);
+export default withSuspense(HighlightReviews);
