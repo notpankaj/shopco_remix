@@ -2,11 +2,13 @@
   height: 280px;
   display: flex;
   flex-direction: column;
+  top: -200px;
 }
 
 @media (min-width: 396px) {
   .container {
     height: 250px;
+    top: -170px;
   }
 }
 
@@ -17,6 +19,7 @@
     height: 200px;
     align-items: center;
     justify-content: space-between;
+    top: -120px;
   }
   .section_a {
     flex: 1;

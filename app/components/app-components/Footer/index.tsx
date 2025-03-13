@@ -4,7 +4,7 @@ import Newsletter from "../Newsletter";
 
 const Footer = () => {
   return (
-    <div className="relative bg-[var(--bg-thrid)] mt-[300px]  py-[50px] px-[15px] pt-[100px] pl-[30px] md:px-[8%] flex flex-col  ">
+    <div className="relative bg-[var(--bg-thrid)] mt-[250px] md:mt-[200px]  py-[50px] px-[15px] pt-[100px] pl-[30px] md:px-[8%] flex flex-col  ">
       <Newsletter />
       <div className="flex flex-col sm:flex-row border-b-1 border-b-[lightgrey] pb-[30px] 2xl:pb-[40px]">
         <section>

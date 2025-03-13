@@ -2,7 +2,7 @@ import styles from "./index.module.css";
 const Newsletter = () => {
   return (
     <div
-      className={`w-[90%] mx-[5%] top-[-120px] py-[15px] bg-black absolute left-0 rounded-[20px] flex flex-col  ${styles.container}`}
+      className={`w-[90%] mx-[5%]  py-[15px] bg-black absolute left-0 rounded-[20px] flex flex-col  ${styles.container}`}
     >
       <div className={styles.section_a}>
         <h1 className="heading text-white mx-[8%] text-wrap text-[2.7rem]  leading-none">
