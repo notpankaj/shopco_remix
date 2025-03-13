@@ -5,12 +5,13 @@ import "slick-carousel/slick/slick-theme.css";
 import withSuspense from "~/hooks/withSuspense";
 import { FaStar } from "react-icons/fa";
 import { FaCheckCircle } from "react-icons/fa";
+
 const HighlightReviews = () => {
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: 5, // Default for largest screens
     slidesToScroll: 1,
     autoplay: true,
     arrows: false,
@@ -18,17 +19,35 @@ const HighlightReviews = () => {
     centerPadding: "20px",
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1400, // For screens smaller than 1400px
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 4,
           slidesToScroll: 1,
+          centerPadding: "20px",
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 1024, // For screens smaller than 1024px
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          centerPadding: "15px",
+        },
+      },
+      {
+        breakpoint: 768, // For screens smaller than 768px
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          centerPadding: "10px",
+        },
+      },
+      {
+        breakpoint: 600, // For screens smaller than 600px
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
+          centerPadding: "10px",
         },
       },
     ],
@@ -107,7 +126,7 @@ const HighlightReviews = () => {
           {reviews.map((review) => (
             <div
               key={review.id}
-              className="h-[240px] border-1 border-gray-300  px-[20px] py-[30px] rounded-[20px]"
+              className="h-[240px] border-1 border-gray-300 px-[20px] py-[30px] rounded-[20px]"
             >
               <div className="flex gap-[4px]">
                 {new Array(5).fill(null).map((_, key) => (
