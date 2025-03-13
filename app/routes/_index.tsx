@@ -1,7 +1,10 @@
-import BrandSlider from "~/components/BrandSlider";
-import HeroSection from "~/components/HeroSection";
-import Navbar from "~/components/Navbar";
-import OfferAds from "~/components/OfferAds";
+import BrandSlider from "~/components/app-components/BrandSlider";
+import BrowserByStyles from "~/components/app-components/BrowserByStyles";
+import Footer from "~/components/app-components/Footer";
+import HeroSection from "~/components/app-components/HeroSection";
+import HighlightReviews from "~/components/app-components/HighlightReviews";
+import Navbar from "~/components/app-components/Navbar";
+import OfferAds from "~/components/app-components/OfferAds";
 
 const Index = () => {
   return (
@@ -10,6 +13,9 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <BrandSlider />
+      <HighlightReviews />
+      <BrowserByStyles />
+      <Footer />
     </div>
   );
 };

@@ -42,7 +42,7 @@ const Navbar = () => {
 
       {/* end */}
       <div className="flex gap-[5px] items-center justify-end flex-1 ">
-        <div className="bg-[#F0F0F0] flex-[0.8] max-w-[350px] mr-[20px] hidden md:flex px-[20px] py-[10px] rounded-[62px] flex gap-[5px] items-center">
+        <div className="bg-[#F0F0F0] flex-[0.8] max-w-[350px] mr-[20px] hidden md:flex px-[20px] py-[10px] rounded-[62px]  gap-[5px] items-center">
           <IoSearch className="text-[18px] opacity-[0.4]" />
           <input
             placeholder="Search for project"
