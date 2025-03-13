@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+@layer components {
+    .btn-primary {
+        background-color: var(--color-black);
+        color: var(--color-white);
+        padding: 10px 20px;
+        font-size: 14px;
+        border-radius: 62px;
+        cursor: pointer;
+        font-weight: 300;
+
+        &:hover {
+            scale: 0.95;
+            text-decoration: underline;
+        }
+
+        &:active {
+            opacity: 0.7;
+        }
+    }
+}

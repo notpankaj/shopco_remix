@@ -1,0 +1,43 @@
+.main_text {
+    font-size: 2.7rem;
+}
+
+@media(min-width:360px) {
+    .main_text {
+        font-size: 4rem;
+    }
+}
+
+@media(min-width:500px) {
+    .main_text {
+        font-size: 5.5rem;
+    }
+}
+
+/* md */
+@media(min-width:768px) {
+    .main_text {
+        font-size: 4rem;
+    }
+}
+
+/* lg */
+@media(min-width:1024px) {
+    .main_text {
+        font-size: 5.5rem;
+    }
+}
+
+/* xl */
+@media(min-width:1280px) {
+    .main_text {
+        font-size: 6rem;
+    }
+}
+
+/* 2xl */
+@media(min-width:1536px) {
+    .main_text {
+        font-size: 7rem;
+    }
+}
