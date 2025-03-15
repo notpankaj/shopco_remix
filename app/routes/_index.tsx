@@ -6,6 +6,7 @@ import HighlightReviews from "~/components/app-components/HighlightReviews";
 import Navbar from "~/components/app-components/Navbar";
 import NewArrivals from "~/components/app-components/NewArrivals";
 import OfferAds from "~/components/app-components/OfferAds";
+import TopSelling from "~/components/TopSelling";
 
 const Index = () => {
   return (
@@ -15,6 +16,7 @@ const Index = () => {
       <HeroSection />
       <BrandSlider />
       <NewArrivals />
+      <TopSelling />
       <BrowserByStyles />
       <HighlightReviews />
       <Footer />
