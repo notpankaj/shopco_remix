@@ -15,8 +15,8 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <BrandSlider />
-      <NewArrivals />
-      <TopSelling />
+      {/* <NewArrivals /> */}
+      {/* <TopSelling /> */}
       <BrowserByStyles />
       <HighlightReviews />
       <Footer />
