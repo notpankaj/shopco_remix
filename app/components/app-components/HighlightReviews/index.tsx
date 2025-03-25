@@ -11,17 +11,17 @@ const HighlightReviews = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 5, // Default for largest screens
+    slidesToShow: 4, // Default for largest screens
     slidesToScroll: 1,
     autoplay: true,
     arrows: false,
     autoplaySpeed: 2000,
-    centerPadding: "20px",
+    // centerPadding: "50px",
     responsive: [
       {
         breakpoint: 1400, // For screens smaller than 1400px
         settings: {
-          slidesToShow: 4,
+          slidesToShow: 3,
           slidesToScroll: 1,
           centerPadding: "20px",
         },
@@ -121,12 +121,12 @@ const HighlightReviews = () => {
       <h1 className="heading text-[2rem] mx-[4%] md:mx-[8%]">
         OUR HAPPY CUSTOMERS
       </h1>
-      <div className="mx-[4%] md:mx-[8%]">
+      <div className="mx-[4%] md:mx-[8%] ">
         <Slider {...settings}>
           {reviews.map((review) => (
             <div
               key={review.id}
-              className="h-[240px] border-1 border-gray-300 px-[20px] py-[30px] rounded-[20px]"
+              className="h-[240px]  border-1 border-gray-300 px-[20px] py-[30px] rounded-[20px]"
             >
               <div className="flex gap-[4px]">
                 {new Array(5).fill(null).map((_, key) => (
