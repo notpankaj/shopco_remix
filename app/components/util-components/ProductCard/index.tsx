@@ -1,8 +1,9 @@
-import React from "react";
+import { useNavigate } from "@remix-run/react";
 
 const ProductCard = () => {
+  const naviagte = useNavigate();
   return (
-    <div className="">
+    <div className="" onClick={() => naviagte("/product/123")}>
       <div className="w-[298px] h-[298px] bg-[#F0EEED] rounded-[20px]"></div>
       <div className=" mt-[15px] ml-[6px]">
         <span className="text-[16px] font-medium">

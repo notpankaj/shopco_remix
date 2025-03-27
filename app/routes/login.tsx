@@ -9,7 +9,7 @@ const Index = () => {
             <h1 className="heading text-[52px] mb-[50px] mt-[-50px]">
               Welcome Back!
             </h1>
-            <Form method="post" className="space-y-6">
+            <Form method="post" className="space-y-6" onSubmit={() => {}}>
               <div>
                 <label
                   htmlFor="email"
