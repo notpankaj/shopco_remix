@@ -1,8 +1,12 @@
-import { Form, useNavigate } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
+import Navbar from "~/components/app-components/Navbar";
 const Index = () => {
   const naviagte = useNavigate();
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen">
+      <div className="fixed top-0 w-full bg-white">
+        <Navbar />
+      </div>
       <div className="flex">
         <section className="flex-1 h-[100vh] bg-[#000]"></section>
         <section className="flex-1 h-[100vh] flex items-center justify-center">
@@ -10,7 +14,7 @@ const Index = () => {
             <h1 className="heading text-[52px] mb-[50px] mt-[-50px]">
               Welcome Back!
             </h1>
-            <Form method="post" className="space-y-6" onSubmit={() => {}}>
+            <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
               <div>
                 <label
                   htmlFor="email"
@@ -99,7 +103,7 @@ const Index = () => {
                   </a>
                 </p>
               </div>
-            </Form>
+            </form>
           </div>
         </section>
       </div>
