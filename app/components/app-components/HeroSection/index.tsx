@@ -39,13 +39,13 @@ const HeroSection = () => {
         </div>
       </section>
       <section>
-        <div className="w-full  md:w-[50vw] h-full  md:min-h-[400px] md:min-h-full max-h-[580px]  flex items-end ">
-          <div className="w-full mx-auto max-w-[590px] md:max-w-auto md:min-h-[400px] max-h-[580px] 2xl:mr-[20%] overflow-hidden flex items-end ">
-            <img
-              src="/public/temp/Bannar.png"
-              className=" w-[100%]  h-[100%] object-cover"
-            />
-          </div>
+        <div className="w-full  md:w-[50vw] h-full  md:min-h-full md:max-h-[580px] max-w-[1200px]  flex items-end ">
+          {/* <div className="w-full mx-auto max-w-[590px] md:max-w-auto md:min-h-[400px] max-h-[580px] 2xl:mr-[20%] overflow-hidden flex items-end "> */}
+          <img
+            src="/public/temp/Bannar.png"
+            className=" w-[100%]  h-[100%] object-contain"
+          />
+          {/* </div> */}
         </div>
       </section>
     </div>
