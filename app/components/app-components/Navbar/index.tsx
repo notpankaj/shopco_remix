@@ -38,7 +38,7 @@ const Navbar = () => {
             },
           ].map((link, key) => {
             return (
-              <a href="#">
+              <a href="#" key={key}>
                 <span className="font-[200] text-[14px] xl:text-[16px] 2xl:text-[18px]">
                   {link.title}
                 </span>
@@ -76,7 +76,7 @@ const Navbar = () => {
         </button>
         <button
           className="w-[30px] h-[30px] cursor-pointer"
-          onClick={() => naviagte("/login")}
+          onClick={() => naviagte("/auth/login")}
         >
           <FaRegCircleUser className="text-[18px]" />
         </button>

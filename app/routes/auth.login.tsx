@@ -1,15 +1,16 @@
-import { Form } from "@remix-run/react";
+import { Form, useNavigate } from "@remix-run/react";
 const Index = () => {
+  const naviagte = useNavigate();
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen">
-      <div className="flex flex-row-reverse">
+      <div className="flex">
         <section className="flex-1 h-[100vh] bg-[#000]"></section>
         <section className="flex-1 h-[100vh] flex items-center justify-center">
           <div className="w-[400px]  rounded-lg ">
             <h1 className="heading text-[52px] mb-[50px] mt-[-50px]">
-              Sign Up!
+              Welcome Back!
             </h1>
-            <Form method="post" className="space-y-6">
+            <Form method="post" className="space-y-6" onSubmit={() => {}}>
               <div>
                 <label
                   htmlFor="email"
@@ -65,7 +66,10 @@ const Index = () => {
 
               <div className="text-right">
                 <a
-                  href="/forgot-password"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    naviagte("/auth/forget_password");
+                  }}
                   className="text-sm text-black hover:underline"
                 >
                   Forget your password
@@ -84,7 +88,13 @@ const Index = () => {
               <div className="text-center">
                 <p className="text-sm text-gray-600">
                   Don’t have an account?{" "}
-                  <a href="/signup" className="text-gray-900 hover:underline">
+                  <a
+                    onClick={(e) => {
+                      e.preventDefault();
+                      naviagte("/auth/signup");
+                    }}
+                    className="text-gray-900 hover:underline"
+                  >
                     Sign up
                   </a>
                 </p>
