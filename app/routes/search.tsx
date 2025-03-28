@@ -6,6 +6,7 @@ import SimiliarProducts from "~/components/app-components/SimilarProducts";
 import Line from "~/components/util-components/Line";
 import ProductCard from "~/components/util-components/ProductCard";
 import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
+import FilterSection from "~/components/util-components/FilterSection";
 const Search = () => {
   //   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -14,7 +15,9 @@ const Search = () => {
       <OfferAds />
       <Navbar />
       <div className="flex mx-[5%] mt-[50px] gap-[20px]">
-        <section className=" max-w-[300px] bg-amber-600 flex-1"></section>
+        <section className=" max-w-[300px] bg-yellow-50 flex-1">
+          <FilterSection />
+        </section>
         <section className="flex-1">
           {/* header */}
           <div className="flex items-center justify-between">
