@@ -1,7 +1,41 @@
 import { useNavigate } from "@remix-run/react";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { Api_Auth } from "~/api/auth";
 import Navbar from "~/components/app-components/Navbar";
+import useNoAuthRoutes from "~/hooks/useNoAuthRoutes";
+import { AppDispatch } from "~/store";
+import { setAuth } from "~/store/feature/auth/authSlice";
+// import Loader from "~/components/util-components/Loader";
+
 const Index = () => {
+  useNoAuthRoutes();
   const naviagte = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const [values, setValues] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+
+  const onLogin = async () => {
+    try {
+      setLoading(true);
+      const res = await Api_Auth.login(values.email, values.password);
+      dispatch(
+        setAuth({
+          user: res.data,
+          token: res.data?.token,
+        })
+      );
+      toast.success(res?.message);
+      naviagte("/");
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen">
       <div className="fixed top-0 w-full bg-white">
@@ -14,7 +48,7 @@ const Index = () => {
             <h1 className="heading text-[52px] mb-[50px] mt-[-50px]">
               Welcome Back!
             </h1>
-            <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+            <div className="space-y-6">
               <div>
                 <label
                   htmlFor="email"
@@ -26,6 +60,10 @@ const Index = () => {
                   type="text"
                   id="email"
                   name="email"
+                  value={values.email}
+                  onChange={(e) =>
+                    setValues({ ...values, email: e.target.value })
+                  }
                   className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder=""
                 />
@@ -64,6 +102,10 @@ const Index = () => {
                   type="password"
                   id="password"
                   name="password"
+                  value={values.password}
+                  onChange={(e) =>
+                    setValues({ ...values, password: e.target.value })
+                  }
                   className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
@@ -82,10 +124,10 @@ const Index = () => {
 
               <div>
                 <button
-                  type="submit"
+                  onClick={onLogin}
                   className="w-full py-3 px-4 bg-gray-300 text-gray-800 rounded-full hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                 >
-                  Sign in
+                  {loading ? "Loading..." : "Sign in"}
                 </button>
               </div>
 
@@ -103,7 +145,7 @@ const Index = () => {
                   </a>
                 </p>
               </div>
-            </form>
+            </div>
           </div>
         </section>
       </div>

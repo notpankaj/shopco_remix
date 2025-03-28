@@ -9,6 +9,13 @@ import type { LinksFunction } from "@remix-run/node";
 
 import "./tailwind.css";
 import "./global.css";
+import { Provider, useDispatch } from "react-redux";
+import { AppDispatch, store } from "./store";
+import { useEffect } from "react";
+import { LOCAL_KEYS } from "./constant";
+import { setAuth } from "./store/feature/auth/authSlice";
+import { User } from "./types/User";
+import { Toaster } from "react-hot-toast";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -23,6 +30,20 @@ export const links: LinksFunction = () => [
   },
 ];
 
+const App_Init = ({ children }: { children: React.ReactNode }) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    let localUser: any = localStorage.getItem(LOCAL_KEYS.user);
+    let localToken = localStorage.getItem(LOCAL_KEYS.token);
+    if (localUser && localToken) {
+      localUser = JSON.parse(localUser) as User;
+      dispatch(setAuth({ token: localToken, user: localUser! }));
+    }
+  }, [dispatch]);
+  return <div>{children}</div>;
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -33,9 +54,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <div className="mw_constraint">{children}</div>
-        <ScrollRestoration />
-        <Scripts />
+        <Provider store={store}>
+          <Toaster position="top-center" reverseOrder={false} />
+          <App_Init>
+            <div className="mw_constraint">{children}</div>
+            <ScrollRestoration />
+            <Scripts />
+          </App_Init>
+        </Provider>
       </body>
     </html>
   );
