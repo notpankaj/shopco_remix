@@ -14,8 +14,8 @@ const Search = () => {
     <div className="bg-[var(--bg-primary)] min-h-screen">
       <OfferAds />
       <Navbar />
-      <div className="flex mx-[5%] mt-[50px] gap-[20px]">
-        <section className=" max-w-[300px] bg-yellow-50 flex-1">
+      <div className="flex mx-[5%] mt-[50px] gap-[20px] relative">
+        <section className="max-w-[300px] flex-1">
           <FilterSection />
         </section>
         <section className="flex-1">

@@ -1,0 +1,41 @@
+#price_range {
+    /* CSS for the wrapper element */
+}
+
+#price_range[data-disabled] {
+    /* CSS for disabled range slider element */
+}
+
+#price_range .range-slider__range {
+    /* CSS for range */
+    background-color: black;
+}
+
+#price_range .range-slider__range[data-active] {
+    /* CSS for active (actively being dragged) range */
+
+}
+
+#price_range .range-slider__thumb {
+    /* CSS for thumbs */
+
+}
+
+#price_range .range-slider__thumb[data-lower] {
+    /* CSS for lower thumb */
+    background-color: black;
+
+}
+
+#price_range .range-slider__thumb[data-upper] {
+    background-color: black;
+    /* CSS for upper thumb */
+}
+
+#price_range .range-slider__thumb[data-active] {
+    /* CSS for active (actively being dragged) thumbs */
+}
+
+#price_range .range-slider__thumb[data-disabled] {
+    /* CSS for disabled thumbs */
+}
