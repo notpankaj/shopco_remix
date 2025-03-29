@@ -9,7 +9,7 @@ import SimiliarProducts from "~/components/app-components/SimilarProducts";
 import { Product } from "~/types/Product";
 import { getDiscountedPrice } from "~/utils/price_discount";
 import { price_formater } from "~/utils/price_formater";
-
+import { FaCheck } from "react-icons/fa";
 const AllReviews = () => {
   return (
     <div className=" mx-[5%] mt-[50px] border-t border-t-gray-200 ">
@@ -57,21 +57,21 @@ const Products = () => {
   const { productId } = useParams() as Params;
   const [product, setProduct] = useState<Product | any>(null);
   const [loading, setLoading] = useState(false);
-  const [activeVariants, setActiveVariants] = useState<any>(null);
+  const [activeVariant, setActiveVariant] = useState<any>(null);
   let [count, setCount] = useState(1);
 
-  const price = price_formater(activeVariants?.price);
+  const allVariants = product?.variants;
+  const price = price_formater(activeVariant?.price);
   const discountPrice = price_formater(
-    getDiscountedPrice(activeVariants?.price, 20)
+    getDiscountedPrice(activeVariant?.price, 20)
   );
 
   const fetchProductDetail = async () => {
     try {
       setLoading(true);
       const { data } = await Api_Product.getProductById(productId);
-      console.log(data);
       setProduct(data);
-      setActiveVariants(data?.variants[0]);
+      setActiveVariant(data?.variants[0]);
     } catch (error) {
       console.log(error);
     } finally {
@@ -96,27 +96,27 @@ const Products = () => {
           <div className="flex flex-col justify-between">
             <article className="w-[159px] h-[162px] bg-[grey] rounded-[20px]  overflow-hidden">
               <img
-                className="w-[100%] h-[100%] object-fit"
-                src={activeVariants?.photos[1]}
+                className="w-[100%] h-[100%] object-cover"
+                src={activeVariant?.photos[1]}
               />
             </article>
             <article className="w-[159px] h-[162px] bg-[grey] rounded-[20px]  overflow-hidden">
               <img
-                className="w-[100%] h-[100%] object-fit"
-                src={activeVariants?.photos[2]}
+                className="w-[100%] h-[100%] object-cover"
+                src={activeVariant?.photos[2]}
               />
             </article>
             <article className="w-[159px] h-[162px] bg-[grey] rounded-[20px]  overflow-hidden">
               <img
-                className="w-[100%] h-[100%] object-fit"
-                src={activeVariants?.photos[3]}
+                className="w-[100%] h-[100%] object-cover"
+                src={activeVariant?.photos[0]}
               />
             </article>
           </div>
           <article className="w-[444px] h-[530px] bg-[grey] rounded-[20px] overflow-hidden">
             <img
-              className="w-[100%] h-[100%] object-fit"
-              src={activeVariants?.photos[0]}
+              className="w-[100%] h-[100%] object-cover"
+              src={activeVariant?.photos[0]}
             />
           </article>
         </div>
@@ -147,14 +147,24 @@ const Products = () => {
               <span className="text-[14px] text-gray-500 font-light">
                 Select Colors
               </span>
-              <div className="my-[5px]">
-                {[activeVariants?.color]?.map((item: any, key: number) => {
+              <div className="my-[5px] flex ">
+                {allVariants?.map((variant: any, key: number) => {
+                  const colorObj = variant?.color;
+                  const isActive = variant?._id === activeVariant?._id;
+                  if (!colorObj) return;
                   return (
                     <button
                       key={key}
-                      style={{ background: item?.primary?.name }}
-                      className={`cursor-pointer w-[37px] h-[37px] rounded-full mr-[10px]`}
-                    ></button>
+                      onClick={() => {
+                        setActiveVariant(variant);
+                      }}
+                      style={{ background: colorObj?.secondary }}
+                      className={`cursor-pointer w-[37px] h-[37px] rounded-full mr-[10px]  flex items-center justify-center`}
+                    >
+                      {isActive && (
+                        <FaCheck className="text-white text-center text-[15px]" />
+                      )}
+                    </button>
                   );
                 })}
               </div>
@@ -165,7 +175,7 @@ const Products = () => {
                 Choose Size
               </span>
               <div className="my-[5px] mt-[10px]">
-                {[activeVariants?.size]?.map((item: any, key: number) => {
+                {[activeVariant?.size]?.map((item: any, key: number) => {
                   const isActive = item === "Large";
                   return (
                     <button
