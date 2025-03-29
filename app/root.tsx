@@ -6,7 +6,6 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
-
 import "./tailwind.css";
 import "./global.css";
 import { Provider, useDispatch } from "react-redux";
@@ -16,6 +15,7 @@ import { LOCAL_KEYS } from "./constant";
 import { setAuth } from "./store/feature/auth/authSlice";
 import { User } from "./types/User";
 import { Toaster } from "react-hot-toast";
+import useCartSync from "./hooks/useCartSync";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -33,6 +33,8 @@ export const links: LinksFunction = () => [
 const App_Init = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isReady, setIsReady] = useState(false);
+
+  useCartSync();
   const init = async () => {
     try {
       let localUser: any = localStorage.getItem(LOCAL_KEYS.user);
