@@ -12,7 +12,10 @@ import {
   deleteCartItem,
   removeItemInCart,
 } from "~/store/feature/cart/cartSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { retry } from "@reduxjs/toolkit/query";
+import { getDiscountedPrice } from "~/utils/price_discount";
+import { price_formater } from "~/utils/price_formater";
 
 const CartItem = ({
   hideLine = false,
@@ -79,7 +82,7 @@ const CartItem = ({
             </p>
           </div>
           <p className="text-[14px] font-medium mb-[15px]">
-            $ {selectedVarient?.price}
+            $ {price_formater(selectedVarient?.price)}
           </p>
         </div>
         <div className="flex flex-col items-end justify-between mb-[10px]">
@@ -102,8 +105,23 @@ const CartItem = ({
   );
 };
 
+const DELVERY_FEE = 15;
 const Index = () => {
   const cartItems = useSelector((s: RootState) => s.cart.items);
+  const memoValue = useMemo(() => {
+    return cartItems.reduce(
+      (acc, curr) => {
+        const variant_id = curr?.variant_id;
+        const varient = curr?.product?.variants?.find(
+          (item: any) => item?._id === variant_id
+        );
+        acc.total += varient.price;
+        return acc;
+      },
+      { total: 0 }
+    );
+  }, [cartItems]);
+
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen">
       <OfferAds />
@@ -130,26 +148,43 @@ const Index = () => {
                 <span className="text-[12px] text-[#00000070] font-light">
                   Subtotal
                 </span>
-                <span className="text-[12px]">$565</span>
+                <span className="text-[12px]">
+                  $ {price_formater(memoValue?.total)}
+                </span>
               </div>
               <div className="flex items-baseline justify-between">
                 <span className="text-[12px] text-[#00000070] font-light">
                   Discount (-20%)
                 </span>
-                <span className="text-[12px] text-red-400">-$113</span>
+                <span className="text-[12px] text-red-400">
+                  -${" "}
+                  {price_formater(
+                    Number(
+                      (
+                        memoValue.total -
+                        getDiscountedPrice(memoValue?.total, 20)
+                      ).toFixed(2)
+                    )
+                  )}
+                </span>
               </div>
               <div className="flex items-baseline justify-between">
                 <span className="text-[12px] text-[#00000070] font-light">
                   Delivery Fee
                 </span>
-                <span className="text-[12px]">$15</span>
+                <span className="text-[12px]">${DELVERY_FEE}</span>
               </div>
               <Line />
               <div className="flex items-baseline justify-between">
                 <span className="text-[12px] text-[#00000070] font-light">
                   Total
                 </span>
-                <span className="text-[12px]">$467</span>
+                <span className="text-[12px]">
+                  ${" "}
+                  {price_formater(
+                    Number(getDiscountedPrice(memoValue?.total, 20)) - 15
+                  )}
+                </span>
               </div>
             </div>
 
