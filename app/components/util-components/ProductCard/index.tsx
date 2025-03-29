@@ -5,14 +5,20 @@ import { price_formater } from "~/utils/price_formater";
 const ProductCard = ({ product }: any) => {
   const naviagte = useNavigate();
   const variantOne = product?.variants[0] || {};
-
   const price = price_formater(variantOne?.price);
+
   const discountPrice = price_formater(
     getDiscountedPrice(variantOne?.price, 20)
   );
+
   return (
     <div className="" onClick={() => naviagte("/product/" + product?._id)}>
-      <div className="w-[298px] h-[298px] bg-[#F0EEED] rounded-[20px]"></div>
+      <div className="w-[298px] h-[298px] bg-[#F0EEED] rounded-[20px] overflow-hidden">
+        <img
+          src={product?.variants[0]?.photos[0]}
+          className="w-[100%] h-[100%] object-cover"
+        />
+      </div>
       <div className=" mt-[15px] ml-[6px]">
         <span className="text-[16px] font-medium">{product?.name}</span>
         <div className="mt-[5px] ">
