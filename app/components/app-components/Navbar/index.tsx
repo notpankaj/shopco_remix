@@ -90,7 +90,11 @@ const Navbar = () => {
           className="w-[30px] h-[30px] cursor-pointer"
           onClick={onProfileClick}
         >
-          <FaRegCircleUser className="text-[18px]" />
+          {token ? (
+            <FaRegCircleUser className="text-[18px]" />
+          ) : (
+            <span className="heading text-[22px]">Login</span>
+          )}
         </button>
       </div>
     </nav>

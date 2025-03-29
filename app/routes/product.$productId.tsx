@@ -9,7 +9,7 @@ import SimiliarProducts from "~/components/app-components/SimilarProducts";
 import { Product } from "~/types/Product";
 import { getDiscountedPrice } from "~/utils/price_discount";
 import { price_formater } from "~/utils/price_formater";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaPlus, FaMinus } from "react-icons/fa";
 
 const AllReviews = () => {
   return (
@@ -207,7 +207,7 @@ const Products = () => {
                     onClick={() => setCount(count++)}
                     className="cursor-pointer  text-[12px] font-light px-[15px] py-[5px] rounded-[62px]  text-gray-600"
                   >
-                    +
+                    <FaPlus />
                   </button>
                   <button className="cursor-pointer   text-[12px] font-light px-[15px] py-[5px] rounded-[62px]   text-gray-600">
                     {count}
@@ -220,7 +220,7 @@ const Products = () => {
                     }}
                     className="cursor-pointer   text-[12px] font-light px-[15px] py-[5px] rounded-[62px]   text-gray-600"
                   >
-                    -
+                    <FaMinus />
                   </button>
                 </div>
                 <button className="cursor-pointer mr-[10px] text-[12px] font-light h-[45px] rounded-[62px] bg-black text-white flex items-center justify-center flex-1">

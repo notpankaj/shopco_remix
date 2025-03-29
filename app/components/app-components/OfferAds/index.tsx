@@ -1,8 +1,16 @@
+import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
+import { useSelector } from "react-redux";
+import { RootState } from "~/store";
+
+const L0 = "🎉 Sign Up & Get 20% OFF on Your First Order  🛍️✨";
+const L1 = "🔥 Mega Sale! Flat 20% OFF on All Products – Shop Now! 🛍️🎉";
+
 const OfferAds = () => {
+  const naviagte = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
-  const isLoggedIn = false;
+  const isLoggedIn = !!useSelector((s: RootState) => s.auth.token);
 
   const onClose = () => setIsVisible(false);
   if (!isVisible) {
@@ -12,12 +20,14 @@ const OfferAds = () => {
     <div className="bg-black h-[30px] flex items-center justify-center relative">
       <div className="flex gap-[5px] items-center justify-center">
         <p className="text-[8px] md:text-[10px] text-white">
-          Sign up and get 20% off to your first order.
+          {isLoggedIn ? L1 : L0}
         </p>
         {isLoggedIn || (
-          <p className="text-[10px] md:text-[12px] text-white underline">
-            Sign Up Now
-          </p>
+          <button onClick={() => naviagte("/auth/login")}>
+            <p className="text-[10px] md:text-[12px] text-white underline">
+              Join Now
+            </p>
+          </button>
         )}
       </div>
       <button
