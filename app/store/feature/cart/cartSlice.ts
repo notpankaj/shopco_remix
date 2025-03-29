@@ -88,7 +88,7 @@ const cartSlice = createSlice({
     },
     deleteCartItem: (
       state,
-      action: PayloadAction<Omit<CartItemObj, "qty">>
+      action: PayloadAction<Omit<CartItemObj, "qty" | "product">>
     ) => {
       const oldItemIndex = getCartItemIndex(
         state.items,

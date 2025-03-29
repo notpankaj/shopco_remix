@@ -53,7 +53,6 @@ const CartItem = ({
   const handleDeleteAction = () => {
     dispatch(
       deleteCartItem({
-        product: item?.product,
         product_id: item?.product_id,
         variant_id: item?.variant_id,
       })
