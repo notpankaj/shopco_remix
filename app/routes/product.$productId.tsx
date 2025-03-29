@@ -1,9 +1,14 @@
 import { useParams } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { FaCheckCircle, FaStar } from "react-icons/fa";
+import { Api_Product } from "~/api/product";
 import Footer from "~/components/app-components/Footer";
 import Navbar from "~/components/app-components/Navbar";
 import OfferAds from "~/components/app-components/OfferAds";
 import SimiliarProducts from "~/components/app-components/SimilarProducts";
+import { Product } from "~/types/Product";
+import { getDiscountedPrice } from "~/utils/price_discount";
+import { price_formater } from "~/utils/price_formater";
 
 const AllReviews = () => {
   return (
@@ -46,8 +51,42 @@ const AllReviews = () => {
   );
 };
 
+type Params = { productId: string };
+
 const Products = () => {
-  const { productId } = useParams();
+  const { productId } = useParams() as Params;
+  const [product, setProduct] = useState<Product | any>(null);
+  const [loading, setLoading] = useState(false);
+  const [activeVariants, setActiveVariants] = useState<any>(null);
+  let [count, setCount] = useState(1);
+
+  const price = price_formater(activeVariants?.price);
+  const discountPrice = price_formater(
+    getDiscountedPrice(activeVariants?.price, 20)
+  );
+
+  const fetchProductDetail = async () => {
+    try {
+      setLoading(true);
+      const { data } = await Api_Product.getProductById(productId);
+      console.log(data);
+      setProduct(data);
+      setActiveVariants(data?.variants[0]);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProductDetail();
+  }, []);
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen">
       <OfferAds />
@@ -55,30 +94,52 @@ const Products = () => {
       <div className="flex gap-[5%] mx-[5%]  mt-[50px]">
         <div className="flex-1 flex gap-[20px] max-w-[600px]">
           <div className="flex flex-col justify-between">
-            <article className="w-[159px] h-[162px] bg-[grey] rounded-[20px]"></article>
-            <article className="w-[159px] h-[162px] bg-[grey] rounded-[20px]"></article>
-            <article className="w-[159px] h-[162px] bg-[grey] rounded-[20px]"></article>
+            <article className="w-[159px] h-[162px] bg-[grey] rounded-[20px]  overflow-hidden">
+              <img
+                className="w-[100%] h-[100%] object-fit"
+                src={activeVariants?.photos[1]}
+              />
+            </article>
+            <article className="w-[159px] h-[162px] bg-[grey] rounded-[20px]  overflow-hidden">
+              <img
+                className="w-[100%] h-[100%] object-fit"
+                src={activeVariants?.photos[2]}
+              />
+            </article>
+            <article className="w-[159px] h-[162px] bg-[grey] rounded-[20px]  overflow-hidden">
+              <img
+                className="w-[100%] h-[100%] object-fit"
+                src={activeVariants?.photos[3]}
+              />
+            </article>
           </div>
-          <article className="w-[444px] h-[530px] bg-[grey] rounded-[20px]"></article>
+          <article className="w-[444px] h-[530px] bg-[grey] rounded-[20px] overflow-hidden">
+            <img
+              className="w-[100%] h-[100%] object-fit"
+              src={activeVariants?.photos[0]}
+            />
+          </article>
         </div>
         <div className="flex-1 ">
           <section className="max-w-[600px]">
-            <h5 className="heading text-[40px] mt-[10px]">
-              One Life Graphic T-shirt
-            </h5>
+            <h5 className="heading text-[40px] mt-[10px]">{product?.name}</h5>
 
             <div className="info border-gray-200 border-b-t border-b pb-[20px] mt-[10px]">
               <div className="flex items-center gap-[10px]">
-                <p className="text-[16px] font-medium">$260</p>
-                <p className="text-[16px] font-medium opacity-40">$300</p>
-                <span className="text-[10px] font-medium text-red-600 bg-red-100 px-[10px] py-[5px] rounded-[62px]">
-                  -40%
-                </span>
+                <p className="text-[16px] font-medium">$ {price}</p>
+                {price && (
+                  <p className="text-[16px] font-medium opacity-40">
+                    $ {discountPrice}
+                  </p>
+                )}
+                {price && (
+                  <span className="text-[10px] font-medium text-red-600 bg-red-100 px-[10px] py-[5px] rounded-[62px]">
+                    -20%
+                  </span>
+                )}
               </div>
               <p className="text-gray-500 text-[12px] mt-[10px]">
-                This graphic t-shirt which is perfect for any occasion. Crafted
-                from a soft and breathable fabric, it offers superior comfort
-                and style.
+                {product?.description}
               </p>
             </div>
 
@@ -87,11 +148,11 @@ const Products = () => {
                 Select Colors
               </span>
               <div className="my-[5px]">
-                {["red", "blue", "green"].map((item) => {
+                {[activeVariants?.color]?.map((item: any, key: number) => {
                   return (
                     <button
-                      key={item}
-                      style={{ background: item }}
+                      key={key}
+                      style={{ background: item?.primary?.name }}
                       className={`cursor-pointer w-[37px] h-[37px] rounded-full mr-[10px]`}
                     ></button>
                   );
@@ -104,18 +165,18 @@ const Products = () => {
                 Choose Size
               </span>
               <div className="my-[5px] mt-[10px]">
-                {["Small", "Medium", "Large", "X-Large"].map((item) => {
+                {[activeVariants?.size]?.map((item: any, key: number) => {
                   const isActive = item === "Large";
                   return (
                     <button
-                      key={item}
+                      key={key}
                       className={`cursor-pointer mr-[10px] text-[12px] font-light px-[15px] py-[5px] rounded-[62px] ${
                         isActive
                           ? "bg-black text-white"
                           : "bg-[#00000010]  text-gray-600"
                       }`}
                     >
-                      {item}
+                      {item?.name}
                     </button>
                   );
                 })}
@@ -124,13 +185,23 @@ const Products = () => {
 
             <div className="card_btns border-gray-200  pb-[20px] mt-[10px] flex flex-row items-center gap-[20px]">
               <div className="my-[5px] bg-[#00000010] rounded-[62px] h-[45px] flex">
-                <button className="cursor-pointer  text-[12px] font-light px-[15px] py-[5px] rounded-[62px]  text-gray-600">
+                <button
+                  onClick={() => setCount(count++)}
+                  className="cursor-pointer  text-[12px] font-light px-[15px] py-[5px] rounded-[62px]  text-gray-600"
+                >
                   +
                 </button>
                 <button className="cursor-pointer   text-[12px] font-light px-[15px] py-[5px] rounded-[62px]   text-gray-600">
-                  1
+                  {count}
                 </button>
-                <button className="cursor-pointer   text-[12px] font-light px-[15px] py-[5px] rounded-[62px]   text-gray-600">
+                <button
+                  onClick={() => {
+                    if (count >= 1) {
+                      setCount(count--);
+                    }
+                  }}
+                  className="cursor-pointer   text-[12px] font-light px-[15px] py-[5px] rounded-[62px]   text-gray-600"
+                >
                   -
                 </button>
               </div>

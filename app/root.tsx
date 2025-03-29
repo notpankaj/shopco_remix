@@ -11,7 +11,7 @@ import "./tailwind.css";
 import "./global.css";
 import { Provider, useDispatch } from "react-redux";
 import { AppDispatch, store } from "./store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { LOCAL_KEYS } from "./constant";
 import { setAuth } from "./store/feature/auth/authSlice";
 import { User } from "./types/User";
@@ -32,15 +32,28 @@ export const links: LinksFunction = () => [
 
 const App_Init = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const [isReady, setIsReady] = useState(false);
+  const init = async () => {
+    try {
+      let localUser: any = localStorage.getItem(LOCAL_KEYS.user);
+      let localToken = localStorage.getItem(LOCAL_KEYS.token);
+      if (localUser && localToken) {
+        localUser = JSON.parse(localUser) as User;
+        dispatch(setAuth({ token: localToken, user: localUser! }));
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        setIsReady(true);
+      });
+    }
+  };
 
   useEffect(() => {
-    let localUser: any = localStorage.getItem(LOCAL_KEYS.user);
-    let localToken = localStorage.getItem(LOCAL_KEYS.token);
-    if (localUser && localToken) {
-      localUser = JSON.parse(localUser) as User;
-      dispatch(setAuth({ token: localToken, user: localUser! }));
-    }
-  }, [dispatch]);
+    init();
+  }, []);
+
   return <div>{children}</div>;
 };
 
