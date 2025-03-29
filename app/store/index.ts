@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./feature/auth/authSlice";
 import appReducer from "./feature/app/appSlice";
 // import addressReducer from './feature/address/addressSlice';
-// import cartReducer from './feature/cart/cartSlice';
+import cartReducer from "./feature/cart/cartSlice";
 // import wishlistReducer from './feature/wishlist/wishlistSlice';
 // import categoryReducer from './feature/category/categorySlice';
 // import searchReducer from './feature/search/searchSlice';
@@ -13,11 +13,12 @@ export const store = configureStore({
     app: appReducer,
     auth: authReducer,
     // address: addressReducer,
-    // cart: cartReducer,
+    cart: cartReducer,
     // wishlist: wishlistReducer,
     // category: categoryReducer,
     // search: searchReducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
