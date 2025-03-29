@@ -10,6 +10,7 @@ import { Product } from "~/types/Product";
 import { getDiscountedPrice } from "~/utils/price_discount";
 import { price_formater } from "~/utils/price_formater";
 import { FaCheck } from "react-icons/fa";
+
 const AllReviews = () => {
   return (
     <div className="mt-[50px] border-t border-t-gray-200">
@@ -58,6 +59,7 @@ const Products = () => {
   const [product, setProduct] = useState<Product | any>(null);
   const [loading, setLoading] = useState(false);
   const [activeVariant, setActiveVariant] = useState<any>(null);
+  const [selectedSize, setSelectedSize] = useState<any>(null);
   let [count, setCount] = useState(1);
 
   const allVariants = product?.variants;
@@ -65,6 +67,12 @@ const Products = () => {
   const discountPrice = price_formater(
     getDiscountedPrice(activeVariant?.price, 20)
   );
+
+  const onVariantChange = (newVariant: any) => {
+    setCount(0);
+    setSelectedSize(null);
+    setActiveVariant(newVariant);
+  };
 
   const fetchProductDetail = async () => {
     try {
@@ -156,9 +164,7 @@ const Products = () => {
                     return (
                       <button
                         key={key}
-                        onClick={() => {
-                          setActiveVariant(variant);
-                        }}
+                        onClick={() => onVariantChange(variant)}
                         style={{ background: colorObj?.secondary }}
                         className={`cursor-pointer w-[37px] h-[37px] rounded-full mr-[10px]  flex items-center justify-center`}
                       >
@@ -176,10 +182,11 @@ const Products = () => {
                   Choose Size
                 </span>
                 <div className="my-[5px] mt-[10px]">
-                  {[activeVariant?.size]?.map((item: any, key: number) => {
-                    const isActive = item === "Large";
+                  {activeVariant?.size?.map((item: any, key: number) => {
+                    const isActive = item?._id === selectedSize?._id;
                     return (
                       <button
+                        onClick={() => setSelectedSize(item)}
                         key={key}
                         className={`cursor-pointer mr-[10px] text-[12px] font-light px-[15px] py-[5px] rounded-[62px] ${
                           isActive
