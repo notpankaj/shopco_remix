@@ -115,7 +115,7 @@ const Index = () => {
         const varient = curr?.product?.variants?.find(
           (item: any) => item?._id === variant_id
         );
-        acc.total += varient.price;
+        acc.total += varient.price * curr.qty;
         return acc;
       },
       { total: 0 }
@@ -181,9 +181,11 @@ const Index = () => {
                 </span>
                 <span className="text-[12px]">
                   ${" "}
-                  {price_formater(
-                    Number(getDiscountedPrice(memoValue?.total, 20)) - 15
-                  )}
+                  {cartItems.length
+                    ? price_formater(
+                        Number(getDiscountedPrice(memoValue?.total, 20)) - 15
+                      )
+                    : 0}
                 </span>
               </div>
             </div>
