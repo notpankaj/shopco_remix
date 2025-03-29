@@ -4,16 +4,74 @@ import OfferAds from "~/components/app-components/OfferAds";
 import Line from "~/components/util-components/Line";
 import { GrFormNextLink } from "react-icons/gr";
 import { RiDeleteBin2Fill } from "react-icons/ri";
-const CartItem = ({ hideLine = false }: { hideLine?: boolean }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "~/store";
+import {
+  addItemToCart,
+  CartItemObj,
+  deleteCartItem,
+  removeItemInCart,
+} from "~/store/feature/cart/cartSlice";
+import { useEffect, useState } from "react";
+
+const CartItem = ({
+  hideLine = false,
+  item,
+}: {
+  hideLine?: boolean;
+  item: CartItemObj;
+}) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [selectedVarient, setSelectedVarient] = useState<any>(null);
+  useEffect(() => {
+    setSelectedVarient(
+      item?.product?.variants?.find((v: any) => v?._id === item?.variant_id)
+    );
+  }, [item]);
+
+  const handleIncrementAction = () => {
+    console.log("ADD-->");
+    dispatch(
+      addItemToCart({
+        product: item?.product,
+        product_id: item?.product_id,
+        variant_id: item?.variant_id,
+      })
+    );
+  };
+  const handleDecrementAction = () => {
+    console.log("REMOVE-->");
+    dispatch(
+      removeItemInCart({
+        product: item?.product,
+        product_id: item?.product_id,
+        variant_id: item?.variant_id,
+      })
+    );
+  };
+
+  const handleDeleteAction = () => {
+    dispatch(
+      deleteCartItem({
+        product: item?.product,
+        product_id: item?.product_id,
+        variant_id: item?.variant_id,
+      })
+    );
+  };
+
   return (
     <div>
       <article className="flex gap-[20px] mb-[10px]">
-        <div className="w-[124px] h-[124px] rounded-[8px] bg-[var(--bg-secondary)]"></div>
+        <div className="w-[124px] h-[124px] rounded-[8px] bg-[var(--bg-secondary)] overflow-hidden">
+          <img
+            src={selectedVarient?.photos[0]}
+            className="w-[100%] h-[100%] object-cover"
+          />
+        </div>
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
-            <p className="text-[16px] font-semibold ">
-              Gradient Graphic T-shirt
-            </p>
+            <p className="text-[16px] font-semibold ">{item?.product?.name}</p>
             <p className="text-[12px]">
               Size: <span className="font-light opacity-[0.7]">Large</span>
             </p>
@@ -21,16 +79,22 @@ const CartItem = ({ hideLine = false }: { hideLine?: boolean }) => {
               Color: <span className="font-light opacity-[0.7]">white</span>
             </p>
           </div>
-          <p className="text-[14px] font-medium mb-[15px]">$145</p>
+          <p className="text-[14px] font-medium mb-[15px]">
+            $ {selectedVarient?.price}
+          </p>
         </div>
         <div className="flex flex-col items-end justify-between mb-[10px]">
-          <button className="mr-[10px] mt-[5px]">
+          <button className="mr-[10px] mt-[5px]" onClick={handleDeleteAction}>
             <RiDeleteBin2Fill color="red" size={18} className="opacity-[0.8]" />
           </button>
           <div className="flex bg-[var(--bg-secondary)] px-[20px] h-[40px] items-center gap-[20px] rounded-[62px]">
-            <button className="text-[14px]">-</button>
-            <span className="text-[14px] select-none">1</span>
-            <button className="text-[14px]">+</button>
+            <button onClick={handleIncrementAction} className="text-[14px]">
+              +
+            </button>
+            <span className="text-[14px] select-none">{item?.qty}</span>
+            <button onClick={handleDecrementAction} className="text-[14px]">
+              -
+            </button>
           </div>
         </div>
       </article>
@@ -40,6 +104,7 @@ const CartItem = ({ hideLine = false }: { hideLine?: boolean }) => {
 };
 
 const Index = () => {
+  const cartItems = useSelector((s: RootState) => s.cart.items);
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen">
       <OfferAds />
@@ -48,11 +113,12 @@ const Index = () => {
         <h2 className="heading text-[45px]">Your Cart</h2>
         <div className="flex gap-[20px] items-start relative flex-col sm:flex-row">
           <section className="max-[700px] flex-1  border border-[#00000010] rounded-[20px] p-[20px]">
-            {new Array(10).fill(null).map((_, key) => {
+            {cartItems?.map((item, key) => {
               return (
                 <CartItem
+                  item={item}
                   key={key}
-                  hideLine={new Array(10).length - 1 === key}
+                  hideLine={cartItems.length - 1 === key}
                 />
               );
             })}

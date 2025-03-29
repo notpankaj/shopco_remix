@@ -86,6 +86,17 @@ const cartSlice = createSlice({
         state.items.splice(oldItemIndex, 1, newItem);
       }
     },
+    deleteCartItem: (
+      state,
+      action: PayloadAction<Omit<CartItemObj, "qty">>
+    ) => {
+      const oldItemIndex = getCartItemIndex(
+        state.items,
+        action.payload.product_id,
+        action.payload.variant_id
+      );
+      state.items = state.items.filter((_, index) => index !== oldItemIndex);
+    },
     setCart: (state, action: PayloadAction<CartItemObj[]>) => {
       state.items = action.payload;
     },
@@ -96,8 +107,13 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addItemToCart, removeItemInCart, setCart, clearCart } =
-  cartSlice.actions;
+export const {
+  addItemToCart,
+  removeItemInCart,
+  setCart,
+  clearCart,
+  deleteCartItem,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;
 
