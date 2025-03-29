@@ -4,9 +4,21 @@ import { FiShoppingCart } from "react-icons/fi";
 import { IoMenu } from "react-icons/io5";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "~/store";
+
 const Navbar = () => {
   const naviagte = useNavigate();
+  const token = useSelector((s: RootState) => s.auth.token);
   const [searchString, setSearchString] = useState("");
+
+  const onProfileClick = () => {
+    if (token) {
+      naviagte("/profile");
+    } else {
+      naviagte("/auth/login");
+    }
+  };
 
   return (
     <nav className="flex items-center justify-between mx-[4%] my-[5px] ">
@@ -76,7 +88,7 @@ const Navbar = () => {
         </button>
         <button
           className="w-[30px] h-[30px] cursor-pointer"
-          onClick={() => naviagte("/auth/login")}
+          onClick={onProfileClick}
         >
           <FaRegCircleUser className="text-[18px]" />
         </button>

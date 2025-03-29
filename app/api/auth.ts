@@ -36,6 +36,18 @@ class API_AUTH {
       AxiosErrorHandler(error);
     }
   };
+  get_profile = async (token: string, userId: string) => {
+    const uri = `${BASE_URL}/api/v1/auth/profile`;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    try {
+      const response = await axios(uri, { headers });
+      return response.data;
+    } catch (error) {
+      AxiosErrorHandler(error);
+    }
+  };
 }
 
 export const Api_Auth = new API_AUTH();
