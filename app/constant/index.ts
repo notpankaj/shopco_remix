@@ -1,4 +1,4 @@
 export const LOCAL_KEYS = {
   token: "TOKEN",
-  user: "TOKEN",
+  user: "USER",
 };
