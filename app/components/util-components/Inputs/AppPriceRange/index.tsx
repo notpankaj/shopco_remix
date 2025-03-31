@@ -4,6 +4,7 @@ import "./index.css";
 import withSuspense from "~/hooks/withSuspense";
 import { price_formater } from "~/utils/price_formater";
 import { useEffect, useRef, useState } from "react";
+import { MAX_PRODUCT_PRICE } from "~/constant";
 
 interface Props {
   price: [number, number];
@@ -11,10 +12,15 @@ interface Props {
 }
 
 const App_RangeSlider = ({ price, setPrice }: Props) => {
-  const [innerPrice, setInnerPrice] = useState(price);
+  const [innerPrice, setInnerPrice] = useState<[number, number]>([
+    price[0] || 0,
+    price[1] || MAX_PRODUCT_PRICE,
+  ]);
+  const [mounted, setMounted] = useState(false);
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const handlePriceChange = (newValue: [number, number]) => {
+    if (!mounted) return;
     if (debounceTimeout.current) {
       clearTimeout(debounceTimeout.current);
     }
@@ -26,6 +32,7 @@ const App_RangeSlider = ({ price, setPrice }: Props) => {
 
   useEffect(() => {
     handlePriceChange(innerPrice);
+    if (!mounted) setMounted(true);
   }, [innerPrice]);
 
   return (
@@ -34,8 +41,8 @@ const App_RangeSlider = ({ price, setPrice }: Props) => {
         id="price_range"
         className="mt-[15px]"
         step={100}
-        min={150}
-        max={99999}
+        min={0}
+        max={MAX_PRODUCT_PRICE}
         value={innerPrice}
         onInput={setInnerPrice}
       />

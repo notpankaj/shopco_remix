@@ -52,7 +52,13 @@ const Search = () => {
         <section className="flex-1">
           {/* header */}
           <div className="flex items-center justify-between">
-            <h6 className="text-[25px] font-semibold">Casual</h6>
+            {selectedFilters?.search?.length ? (
+              <h6 className="text-[25px] font-semibold">
+                Showing: {selectedFilters?.search}{" "}
+              </h6>
+            ) : (
+              <h6 className="text-[25px] font-semibold">Casual</h6>
+            )}
             <div className="flex gap-[10px]">
               <p className="text-[#00000060] text-[12px]">
                 Showing 1-10 of 100 Products

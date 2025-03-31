@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { MAX_PRODUCT_PRICE } from "~/constant";
 
 export type SelectedFilterType = {
+  search?: string;
   category?: string | null;
   color?: string | null;
   size?: string | null;
@@ -12,6 +14,7 @@ type InitialStateType = {
 };
 
 const DEFAULT_FILTERS = {
+  search: "",
   category: null,
   color: null,
   size: null,
@@ -33,12 +36,18 @@ const productSlice = createSlice({
         ...action.payload,
       };
     },
+    updateFilters: (state, action: PayloadAction<SelectedFilterType>) => {
+      state.filter = {
+        ...state.filter,
+        ...action.payload,
+      };
+    },
     resetFilters: (state) => {
       state.filter = DEFAULT_FILTERS;
     },
   },
 });
 
-export const { resetFilters, setFilters } = productSlice.actions;
+export const { resetFilters, setFilters, updateFilters } = productSlice.actions;
 
 export default productSlice.reducer;

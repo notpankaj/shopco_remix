@@ -36,6 +36,7 @@ const FilterSection = () => {
   const isResetVisible = useMemo(() => {
     return Object.values(selectedFilters).reduce((acc, curr) => {
       if (acc) return true;
+      if (curr === 0 || curr === MAX_PRODUCT_PRICE) return acc;
       if (curr) {
         return true;
       }
@@ -101,10 +102,7 @@ const FilterSection = () => {
         {openState.price && (
           <div>
             <App_RangeSlider
-              price={[
-                selectedFilters.priceMin || 0,
-                selectedFilters.priceMax || MAX_PRODUCT_PRICE,
-              ]}
+              price={[selectedFilters.priceMin!, selectedFilters.priceMax!]}
               setPrice={(val) => {
                 console.log(val);
                 onFilterSelect({
