@@ -4,6 +4,7 @@ import "./index.css";
 import withSuspense from "~/hooks/withSuspense";
 import { price_formater } from "~/utils/price_formater";
 import { useEffect, useRef, useState } from "react";
+
 interface Props {
   price: [number, number];
   setPrice: (value: [number, number]) => void;

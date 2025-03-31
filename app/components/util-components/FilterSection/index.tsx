@@ -13,6 +13,7 @@ import {
   SelectedFilterType,
   setFilters,
 } from "~/store/feature/product/productSlice";
+import { MAX_PRODUCT_PRICE } from "~/constant";
 
 interface OpenState {
   price: boolean;
@@ -102,7 +103,7 @@ const FilterSection = () => {
             <App_RangeSlider
               price={[
                 selectedFilters.priceMin || 0,
-                selectedFilters.priceMax || 99999,
+                selectedFilters.priceMax || MAX_PRODUCT_PRICE,
               ]}
               setPrice={(val) => {
                 console.log(val);

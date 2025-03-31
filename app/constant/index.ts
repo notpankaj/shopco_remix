@@ -3,3 +3,5 @@ export const LOCAL_KEYS = {
   user: "USER",
   cart: "CART",
 };
+
+export const MAX_PRODUCT_PRICE = 10000;

@@ -25,6 +25,8 @@ class API_Product {
       "Content-Type": "application/json",
     };
     const params = data?.filter || {};
+    console.log("QUERY :===>", params);
+
     try {
       const response = await axios(uri, { headers, params });
       return response.data;

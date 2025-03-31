@@ -11,16 +11,22 @@ import { useEffect, useState } from "react";
 import { query_string_to_obj } from "~/utils/query_string_to_obj";
 import toast from "react-hot-toast";
 import { Api_Product, ProductFilterType } from "~/api/product";
+import { useSelector } from "react-redux";
+import { RootState } from "~/store";
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const selectedFilters = useSelector((s: RootState) => s.product.filter);
   const [loading, setLoading] = useState(false);
+
+  const [products, setProducts] = useState<any[]>([]);
 
   const fetchProducts = async (filter: ProductFilterType) => {
     try {
       setLoading(true);
       const { data } = await Api_Product.getProducts({ filter });
       console.log(data, "here");
+      setProducts(data.products);
     } catch (error: any) {
       console.log(error);
       toast.error(error?.message);
@@ -31,11 +37,9 @@ const Search = () => {
 
   useEffect(() => {
     const filterObj = query_string_to_obj(searchParams) as ProductFilterType;
-    console.log(filterObj, "filterObj");
-    fetchProducts(filterObj);
-  }, [searchParams]);
-
-  if (loading) return <h1>Loading...</h1>;
+    // @ts-ignore
+    fetchProducts({ ...filterObj, ...selectedFilters });
+  }, [selectedFilters]);
 
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen">
@@ -61,8 +65,8 @@ const Search = () => {
           </div>
           {/* products */}
           <div className="flex flex-wrap gap-[20px]">
-            {new Array(9).fill(null).map((_, idx) => {
-              return <ProductCard key={idx} />;
+            {products.map((product, idx) => {
+              return <ProductCard key={`${product?._id}`} product={product} />;
             })}
           </div>
           <Line classNames="my-[50px]" />
