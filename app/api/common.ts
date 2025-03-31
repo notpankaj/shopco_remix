@@ -39,7 +39,7 @@ class API_COMMON {
     }
   };
   get_dressStyle = async () => {
-    const uri = `${BASE_URL}/api/v1/admin/dress-style`;
+    const uri = `${BASE_URL}/api/v1/dress-style`;
     const headers = {
       "Content-Type": "application/json",
     };

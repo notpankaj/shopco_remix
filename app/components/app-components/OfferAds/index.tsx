@@ -32,7 +32,7 @@ const OfferAds = () => {
       </div>
       <button
         onClick={onClose}
-        className="hidden md:block w-[30px] h-[30px]  absolute right-[15%] flex items-center justify-center cursor-pointer"
+        className="md:block w-[30px] h-[30px]  absolute right-[15%] flex items-center justify-center cursor-pointer"
       >
         <IoClose color="white" className="text-center ml-[4px]" size={20} />
       </button>

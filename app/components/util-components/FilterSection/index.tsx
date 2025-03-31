@@ -198,17 +198,30 @@ const FilterSection = () => {
         </div>
         {openState.dressStyle && (
           <div>
-            {["Casual", "Formal", "Party", "Gym"].map((item) => (
-              <div
-                key={item}
-                className="flex items-end  justify-between mb-[7px]"
-              >
-                <h6 className="text-[15px] font-light opacity-70">{item}</h6>
-                <button>
-                  <GoChevronRight className="text-[18px]  opacity-70" />
-                </button>
-              </div>
-            ))}
+            {appFilters?.dressStyle.map((item) => {
+              const isActive = selectedFilters?.dressStyle === item?._id;
+              return (
+                <div
+                  onClick={() =>
+                    onFilterSelect({
+                      ...selectedFilters,
+                      dressStyle: item?._id,
+                    })
+                  }
+                  key={item?._id}
+                  className={`flex items-end  justify-between mb-[7px] ${
+                    isActive ? "text-white bg-black" : ""
+                  }`}
+                >
+                  <h6 className={`text-[15px] font-light opacity-70 `}>
+                    {item?.name}
+                  </h6>
+                  <button>
+                    <GoChevronRight className="text-[18px]  opacity-70" />
+                  </button>
+                </div>
+              );
+            })}
           </div>
         )}
       </section>
