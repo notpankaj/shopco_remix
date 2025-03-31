@@ -133,7 +133,10 @@ const FilterSection = () => {
               "4X-Large",
             ].map((item) => {
               return (
-                <button className="text-[12px] text-[#00000060] bg-[#F0F0F0] px-[15px] py-[10px] rounded-[20px]">
+                <button
+                  key={item}
+                  className="text-[12px] text-[#00000060] bg-[#F0F0F0] px-[15px] py-[10px] rounded-[20px]"
+                >
                   {item}
                 </button>
               );

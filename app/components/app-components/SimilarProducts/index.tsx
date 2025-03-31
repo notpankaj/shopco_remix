@@ -13,7 +13,7 @@ const SimiliarProducts = () => {
     try {
       setLoading(true);
       const { data } = await Api_Product.getProducts();
-      setProductList(data);
+      setProductList(data?.products);
     } catch (error: any) {
       toast.error(error?.message);
     } finally {

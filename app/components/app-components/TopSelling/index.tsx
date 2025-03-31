@@ -13,8 +13,10 @@ const TopSelling = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const { data } = await Api_Product.getProducts();
-      setProductList(data);
+      const { data } = await Api_Product.getProducts({
+        filter: { page: 1, limit: 10 },
+      });
+      setProductList(data?.products);
     } catch (error: any) {
       toast.error(error?.message);
     } finally {

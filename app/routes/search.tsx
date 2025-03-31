@@ -7,8 +7,35 @@ import Line from "~/components/util-components/Line";
 import ProductCard from "~/components/util-components/ProductCard";
 import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
 import FilterSection from "~/components/util-components/FilterSection";
+import { useEffect, useState } from "react";
+import { query_string_to_obj } from "~/utils/query_string_to_obj";
+import toast from "react-hot-toast";
+import { Api_Product, ProductFilterType } from "~/api/product";
+
 const Search = () => {
-  //   const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [loading, setLoading] = useState(false);
+
+  const fetchProducts = async (filter: ProductFilterType) => {
+    try {
+      setLoading(true);
+      const { data } = await Api_Product.getProducts({ filter });
+      console.log(data, "here");
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const filterObj = query_string_to_obj(searchParams) as ProductFilterType;
+    console.log(filterObj, "filterObj");
+    fetchProducts(filterObj);
+  }, [searchParams]);
+
+  if (loading) return <h1>Loading...</h1>;
 
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen">
