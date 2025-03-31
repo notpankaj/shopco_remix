@@ -1,15 +1,40 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface AppState {}
+interface AppState {
+  categories: any[];
+  sizes: any[];
+  dressStyle: any[];
+  colors: any[];
+}
 
-const initialState: AppState = {};
+const initialState: AppState = {
+  categories: [],
+  sizes: [],
+  dressStyle: [],
+  colors: [],
+};
 
 export const appSlice = createSlice({
-  name: 'app',
+  name: "app",
   initialState,
-  reducers: {},
+  reducers: {
+    setCommonData: (
+      state,
+      action: PayloadAction<{
+        categories: any[];
+        sizes: any[];
+        dressStyle: any[];
+        colors: any[];
+      }>
+    ) => {
+      state.categories = action.payload.categories;
+      state.sizes = action.payload.sizes;
+      state.colors = action.payload.colors;
+      state.dressStyle = action.payload.dressStyle;
+    },
+  },
 });
 
-export const {} = appSlice.actions;
+export const { setCommonData } = appSlice.actions;
 
 export default appSlice.reducer;

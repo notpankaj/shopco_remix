@@ -16,6 +16,7 @@ import { setAuth } from "./store/feature/auth/authSlice";
 import { User } from "./types/User";
 import { Toaster } from "react-hot-toast";
 import useCartSync from "./hooks/useCartSync";
+import usePreLoadData from "./hooks/usePreLoadData";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -35,6 +36,8 @@ const App_Init = ({ children }: { children: React.ReactNode }) => {
   const [isReady, setIsReady] = useState(false);
 
   useCartSync();
+  usePreLoadData();
+
   const init = async () => {
     try {
       let localUser: any = localStorage.getItem(LOCAL_KEYS.user);

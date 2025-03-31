@@ -3,12 +3,30 @@ import "react-range-slider-input/dist/style.css";
 import "./index.css";
 import withSuspense from "~/hooks/withSuspense";
 import { price_formater } from "~/utils/price_formater";
+import { useEffect, useRef, useState } from "react";
 interface Props {
   price: [number, number];
   setPrice: (value: [number, number]) => void;
 }
 
 const App_RangeSlider = ({ price, setPrice }: Props) => {
+  const [innerPrice, setInnerPrice] = useState(price);
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const handlePriceChange = (newValue: [number, number]) => {
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    debounceTimeout.current = setTimeout(() => {
+      setPrice(newValue);
+    }, 1000);
+  };
+
+  useEffect(() => {
+    handlePriceChange(innerPrice);
+  }, [innerPrice]);
+
   return (
     <>
       <RangeSlider
@@ -17,8 +35,8 @@ const App_RangeSlider = ({ price, setPrice }: Props) => {
         step={100}
         min={150}
         max={99999}
-        value={price}
-        onInput={setPrice}
+        value={innerPrice}
+        onInput={setInnerPrice}
       />
       <div className="flex items-center justify-center gap-[30px] mt-[20px]">
         <div>
