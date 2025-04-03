@@ -122,7 +122,7 @@ const Navbar = () => {
           <FiShoppingCart className="text-[18px]" />
         </button>
         <button
-          className="w-[30px] h-[30px] cursor-pointer"
+          className={` h-[30px] cursor-pointer ${token ? "w-[30px]" : ""}`}
           onClick={onProfileClick}
         >
           {token ? (
