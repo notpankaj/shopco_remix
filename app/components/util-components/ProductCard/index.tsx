@@ -16,7 +16,7 @@ const ProductCard = ({ product }: any) => {
       <div className="w-[298px] h-[298px] bg-[#F0EEED] rounded-[20px] overflow-hidden">
         <img
           src={product?.variants[0]?.photos[0]}
-          className="w-[100%] h-[100%] object-cover"
+          className="w-[100%] h-[100%] object-cover pointer-events-none"
         />
       </div>
       <div className=" mt-[15px] ml-[6px]">
