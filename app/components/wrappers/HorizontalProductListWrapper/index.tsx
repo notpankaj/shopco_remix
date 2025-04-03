@@ -18,9 +18,9 @@ const HorizontalProductListWrapper = ({
       <h3 className="heading uppercase text-[32px]  md:text-[40px] mx-auto text-center">
         {title}
       </h3>
-      {/*  */}
-      {children}
-
+      <section className="flex  gap-[20px] my-[40px]  overflow-x-scroll max-w-[1250px] pl-[20px] w-[85%]">
+        {children}
+      </section>
       {/*  */}
       {disableViewAll || (
         <button

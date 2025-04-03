@@ -26,11 +26,9 @@ const SimiliarProducts = () => {
   }, []);
   return (
     <HorizontalProductListWrapper title="You might also like">
-      <section className="flex  gap-[20px] my-[40px]">
-        {productList?.map((product: any, index: number) => {
-          return <ProductCard key={index} product={product} />;
-        })}
-      </section>
+      {productList?.map((product: any, index: number) => {
+        return <ProductCard key={index} product={product} />;
+      })}
     </HorizontalProductListWrapper>
   );
 };
