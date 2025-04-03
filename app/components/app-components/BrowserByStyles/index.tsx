@@ -11,7 +11,7 @@ const BrowserByStyles = () => {
       </h4>
 
       <section className="flex flex-col gap-[30px]  mx-auto max-w-[1239px]">
-        <div className="flex gap-[30px] relative">
+        <div className="flex gap-[30px] relative flex-col h-[500px] md:h-auto md:flex-row">
           <div className="flex-[0.4] bg-white h-[289px] rounded-[20px] overflow-hidden relative">
             <span className="bg-white font-medium px-[10px] py-[5px] rounded-[10px] text-black text-[25px] absolute top-[15px] left-[20px] z-[1] ">
               Casual
@@ -31,7 +31,7 @@ const BrowserByStyles = () => {
             />
           </div>
         </div>
-        <div className="flex flex-row-reverse gap-[30px]">
+        <div className="flex  gap-[30px] flex-col h-[500px] md:h-auto md:flex-row-reverse">
           <div className="flex-[0.4]  bg-white h-[289px] rounded-[20px] overflow-hidden relative">
             <span className="bg-white font-medium px-[10px] py-[5px] rounded-[10px] text-black text-[25px] absolute top-[15px] left-[20px] z-[1] ">
               Gym
