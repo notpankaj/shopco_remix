@@ -13,9 +13,11 @@ import {
   removeItemInCart,
 } from "~/store/feature/cart/cartSlice";
 import { useEffect, useMemo, useState } from "react";
-import { retry } from "@reduxjs/toolkit/query";
 import { getDiscountedPrice } from "~/utils/price_discount";
 import { price_formater } from "~/utils/price_formater";
+import { loadStripe } from "@stripe/stripe-js";
+import { STRIPE_CANCEL_URL, STRIPE_PK, STRIPE_SUCCESS_URL } from "~/constant";
+import { BASE_URL } from "~/api";
 
 const CartItem = ({
   hideLine = false,
@@ -122,6 +124,39 @@ const Index = () => {
     );
   }, [cartItems]);
 
+  const onCheckout = async () => {
+    try {
+      const stripe = await loadStripe(STRIPE_PK);
+      const body = {
+        products: cartItems,
+        success_url: STRIPE_SUCCESS_URL,
+        cancel_url: STRIPE_CANCEL_URL,
+      };
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      const response = await fetch(`${BASE_URL}/api/v1/stripe-checkout`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(body),
+      });
+      const res = await response.json();
+      const session = res?.data;
+
+      const result = await stripe?.redirectToCheckout({
+        sessionId: session.id,
+      });
+      console.log(result, "stripe result");
+      if (result?.error) {
+        alert("fail");
+      } else {
+        alert("success");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen">
       <OfferAds />
@@ -190,7 +225,10 @@ const Index = () => {
               </div>
             </div>
 
-            <button className="text-white text-[12px] h-[40px] px-[20px] bg-black rounded-[62px] flex items-center justify-center gap-[10px] w-[100%] mt-[15px]">
+            <button
+              onClick={onCheckout}
+              className="text-white text-[12px] h-[40px] px-[20px] bg-black rounded-[62px] flex items-center justify-center gap-[10px] w-[100%] mt-[15px]"
+            >
               Go to Checkout <GrFormNextLink color="white" size={22} />
             </button>
           </section>

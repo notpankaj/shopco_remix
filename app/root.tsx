@@ -11,7 +11,7 @@ import "./global.css";
 import { Provider, useDispatch } from "react-redux";
 import { AppDispatch, store } from "./store";
 import { useEffect, useState } from "react";
-import { LOCAL_KEYS } from "./constant";
+import { LOCAL_KEYS, STRIPE_PK } from "./constant";
 import { setAuth } from "./store/feature/auth/authSlice";
 import { User } from "./types/User";
 import { Toaster } from "react-hot-toast";
