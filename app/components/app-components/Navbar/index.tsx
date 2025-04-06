@@ -12,6 +12,7 @@ const Navbar = () => {
   const naviagte = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector((s: RootState) => s.auth.token);
+  const cartItems = useSelector((s: RootState) => s.cart.items);
   const selectedFilters = useSelector((s: RootState) => s.product.filter);
   const [searchString, setSearchString] = useState(selectedFilters?.search);
 
@@ -116,9 +117,16 @@ const Navbar = () => {
           <IoSearch className="text-[18px]" />
         </button>
         <button
-          className="w-[30px] h-[30px] cursor-pointer"
+          className="w-[30px] h-[30px] cursor-pointer relative mr-[10px]"
           onClick={() => naviagte("/cart")}
         >
+          {!!cartItems?.length && (
+            <div className="w-[20px] h-[20px] bg-black rounded-[20px] flex items-center justify-center absolute top-[-10px] right-[-5px]">
+              <span className="text-white  text-[9px] font-semibold">
+                {cartItems?.length}
+              </span>
+            </div>
+          )}
           <FiShoppingCart className="text-[18px]" />
         </button>
         <button
