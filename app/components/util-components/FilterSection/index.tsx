@@ -225,7 +225,6 @@ const FilterSection = () => {
           </div>
         )}
       </section>
-
       {isResetVisible && (
         <button
           onClick={onResetFilters}

@@ -117,7 +117,9 @@ const Navbar = () => {
           <IoSearch className="text-[18px]" />
         </button>
         <button
-          className="w-[30px] h-[30px] cursor-pointer relative mr-[10px]"
+          className={`w-[30px] h-[30px] cursor-pointer relative  ${
+            !!cartItems?.length ? "mr-[10px]" : ""
+          }`}
           onClick={() => naviagte("/cart")}
         >
           {!!cartItems?.length && (

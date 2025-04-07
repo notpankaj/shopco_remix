@@ -34,6 +34,21 @@ class API_Product {
       AxiosErrorHandler(error);
     }
   };
+  getProductsNew = async (data: GetProductType) => {
+    const uri = `${BASE_URL}/api/v1/product/new`;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const params = data?.filter || {};
+    console.log("QUERY :===>", params);
+
+    try {
+      const response = await axios(uri, { headers, params });
+      return response.data;
+    } catch (error) {
+      AxiosErrorHandler(error);
+    }
+  };
   getProductById = async (productId: string) => {
     const uri = `${BASE_URL}/api/v1/product/${productId}`;
     const headers = {
