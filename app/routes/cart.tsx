@@ -163,8 +163,8 @@ const Index = () => {
       <Navbar />
       <div className="mx-[5%] mt-[50px]">
         <h2 className="heading text-[45px]">Your Cart</h2>
-        <div className="flex gap-[20px] items-start relative flex-col sm:flex-row">
-          <section className="max-[700px] flex-1  border border-[#00000010] rounded-[20px] p-[20px]">
+        <div className="flex gap-[20px] items-start relative flex-col lg:flex-row ">
+          <section className=" flex-1  border border-[#00000010] rounded-[20px] p-[20px] mx-auto w-[100%] lg:w-auto">
             {cartItems?.map((item, key) => {
               return (
                 <CartItem
@@ -175,7 +175,7 @@ const Index = () => {
               );
             })}
           </section>
-          <section className="sticky top-[20px] max-w-[500px] flex-1 border border-[#00000010] rounded-[20px] p-[20px]">
+          <section className="sticky top-[20px] max-w-[500px] flex-1 border border-[#00000010] rounded-[20px] p-[20px] mx-auto w-[100%]">
             <h5 className="text-[16px] font-medium">Order Summary</h5>
 
             <div className="flex flex-col gap-[10px] mt-[20px]">
