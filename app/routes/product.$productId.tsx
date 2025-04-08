@@ -23,8 +23,8 @@ import toast from "react-hot-toast";
 const AllReviews = () => {
   return (
     <div className=" mt-[-20px] max-w-[1250px] mx-auto  ">
-      <div className="py-[20px] flex items-center ">
-        <h6 className="font-medium">All Reviews</h6>
+      <div className="py-[20px] flex items-center max-w-[610px] mx-auto xl:max-w-[100%]">
+        <h6 className="font-medium  ">All Reviews</h6>
         <span className="text-[#00000060] text-[10px] ml-[10px]">{`(456)`}</span>
       </div>
       <div className="flex flex-wrap gap-[20px] items-center justify-center">
@@ -143,29 +143,29 @@ const Products = () => {
     <div className="bg-[var(--bg-primary)] min-h-screen">
       <OfferAds />
       <Navbar />
-      <div className="flex gap-[5%] mx-[5%]  mt-[50px] ">
-        <div className="flex-1 flex gap-[20px] max-w-[600px]">
-          <div className="flex flex-col justify-between">
-            <article className="w-[159px] h-[162px] bg-[grey] rounded-[20px]  overflow-hidden">
+      <div className="flex gap-[5%] mx-[5%] mt-[30px] sm:mt-[50px]  flex-col lg:flex-row items-center">
+        <div className="flex-1  gap-[20px] max-w-[600px] flex flex-col-reverse w-[100%] sm:w-auto sm:flex-row">
+          <div className="flex justify-between flex-row gap-[20px] sm:flex-col sm:gap-0 ">
+            <article className="sm:w-[159px] h-[122px] sm:h-[162px] bg-[grey] rounded-[20px]  overflow-hidden flex-1 sm:flex-none ">
               <img
                 className="w-[100%] h-[100%] object-cover"
                 src={activeVariant?.photos[1]}
               />
             </article>
-            <article className="w-[159px] h-[162px] bg-[grey] rounded-[20px]  overflow-hidden">
+            <article className="sm:w-[159px] h-[122px] sm:h-[162px] bg-[grey] rounded-[20px]  overflow-hidden flex-1 sm:flex-none ">
               <img
                 className="w-[100%] h-[100%] object-cover"
                 src={activeVariant?.photos[2]}
               />
             </article>
-            <article className="w-[159px] h-[162px] bg-[grey] rounded-[20px]  overflow-hidden">
+            <article className="sm:w-[159px] h-[122px] sm:h-[162px] bg-[grey] rounded-[20px]  overflow-hidden flex-1 sm:flex-none ">
               <img
                 className="w-[100%] h-[100%] object-cover"
                 src={activeVariant?.photos[0]}
               />
             </article>
           </div>
-          <article className="w-[444px] h-[530px] bg-[grey] rounded-[20px] overflow-hidden">
+          <article className="w-[100%] sm:w-[444px] h-[400px] sm:h-[530px] bg-[grey] rounded-[20px] overflow-hidden">
             <img
               className="w-[100%] h-[100%] object-cover"
               src={activeVariant?.photos[0]}
