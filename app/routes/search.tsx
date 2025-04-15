@@ -24,12 +24,12 @@ const Search = () => {
   const fetchProducts = async (filter: ProductFilterType) => {
     try {
       setLoading(true);
-      // const { data } = await Api_Product.getProducts({ filter });
-      // console.log(data, "here");
-      // setProducts(data.products);
-      const data = await Api_Product.getProductsNew({ filter });
+      const { data } = await Api_Product.getProducts({ filter });
       console.log(data, "here");
       setProducts(data.products);
+      // const data = await Api_Product.getProductsNew({ filter });
+      // console.log(data, "here");
+      // setProducts(data.products);
     } catch (error: any) {
       console.log(error);
       toast.error(error?.message);
