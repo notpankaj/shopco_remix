@@ -4,18 +4,19 @@ import { price_formater } from "~/utils/price_formater";
 
 const ProductCard = ({ product }: any) => {
   const naviagte = useNavigate();
-  const variantOne = product?.variants[0] || {};
+  const variantOne = product?.variants[0] || product?.variants || {};
   const price = price_formater(variantOne?.price);
 
   const discountPrice = price_formater(
     getDiscountedPrice(variantOne?.price, 20)
   );
 
+  const productImage = variantOne?.photos && variantOne?.photos[0];
   return (
     <div className="" onClick={() => naviagte("/product/" + product?._id)}>
       <div className="w-[298px] h-[298px] bg-[#F0EEED] rounded-[20px] overflow-hidden">
         <img
-          src={product?.variants[0]?.photos[0]}
+          src={productImage}
           className="w-[100%] h-[100%] object-cover pointer-events-none"
         />
       </div>
