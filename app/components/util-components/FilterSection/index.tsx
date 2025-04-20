@@ -14,7 +14,7 @@ import {
   setFilters,
 } from "~/store/feature/product/productSlice";
 import { EE, EE_EVENTS, MAX_PRODUCT_PRICE } from "~/constant";
-
+import style from "./index.module.css";
 interface OpenState {
   price: boolean;
   color: boolean;
@@ -22,7 +22,10 @@ interface OpenState {
   dressStyle: boolean;
 }
 
-const FilterSection = () => {
+type Props = {
+  onGearClick?: () => void;
+};
+const FilterSection = ({ onGearClick }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const appFilters = useSelector((s: RootState) => s.app);
   const selectedFilters = useSelector((s: RootState) => s.product.filter);
@@ -58,11 +61,13 @@ const FilterSection = () => {
   };
 
   return (
-    <section className="border border-[#00000010] rounded-[20px]    px-[20px] pt-[15px] pb-[40px]">
+    <section
+      className={`bg-white shadow-2xl border border-[#00000010] rounded-[20px] px-[20px] pt-[15px] pb-[40px] ${style.container}`}
+    >
       <div className="flex items-center  justify-between ">
         <h6 className="text-[20px] font-medium">Filters</h6>
         <button>
-          <RiListSettingsLine className="text-[22px]" />
+          <RiListSettingsLine className="text-[22px]" onClick={onGearClick} />
         </button>
       </div>
       <Line classNames="my-[15px]" />

@@ -25,3 +25,45 @@
 button {
   cursor: pointer;
 }
+
+/* search filter */
+
+/* .search__filter_container.desktop {
+} */
+.search__filter_container.mobile {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding: 0px 20px;
+  width: 350px;
+  bottom: 0;
+  right: 0%;
+  transform: translateY(calc(100% - 50px));
+  height: 450px;
+  transition: transform 0.3s ease;
+}
+@media (max-width: 500px) {
+  .search__filter_container.mobile {
+    width: 100vw;
+    transform: translateY(100%);
+  }
+}
+@media (max-width: 900px) {
+  .search__filter_container.desktop {
+    display: none;
+  }
+
+  .search__filter_container.mobile {
+    display: block;
+  }
+
+  .search__filter_container.mobile::-webkit-scrollbar {
+    display: none;
+  }
+  .search__filter_container.mobile.open {
+    transform: translateY(0);
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

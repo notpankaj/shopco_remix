@@ -7,7 +7,7 @@ import Line from "~/components/util-components/Line";
 import ProductCard from "~/components/util-components/ProductCard";
 import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
 import FilterSection from "~/components/util-components/FilterSection";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { query_string_to_obj } from "~/utils/query_string_to_obj";
 import toast from "react-hot-toast";
 import { Api_Product, ProductFilterType } from "~/api/product";
@@ -18,6 +18,7 @@ const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedFilters = useSelector((s: RootState) => s.product.filter);
   const [loading, setLoading] = useState(false);
+  const filterMobileRef = useRef<HTMLDivElement>(null);
 
   const [products, setProducts] = useState<any[]>([]);
 
@@ -45,14 +46,21 @@ const Search = () => {
   }, [selectedFilters]);
 
   return (
-    <div className="bg-[var(--bg-primary)] min-h-screen">
+    <div className="bg-[var(--bg-primary)] min-h-screen relative">
+      <div className="search__filter_container mobile" ref={filterMobileRef}>
+        <FilterSection
+          onGearClick={() => {
+            filterMobileRef.current?.classList.toggle("open");
+          }}
+        />
+      </div>
       <OfferAds />
       <Navbar />
       <div className="flex mx-[5%] mt-[50px] gap-[20px] relative">
-        <section className="max-w-[300px] flex-1">
+        <section className="search__filter_container desktop max-w-[300px] flex-1">
           <FilterSection />
         </section>
-        <section className="flex-1">
+        <section className="flex-1 ">
           {/* header */}
           <div className="flex items-center justify-between">
             {selectedFilters?.search?.length ? (
