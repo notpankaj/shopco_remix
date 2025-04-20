@@ -7,8 +7,7 @@ export type SelectedFilterType = {
   color?: string | null;
   size?: string | null;
   dressStyle?: string | null;
-  priceMin?: number | null;
-  priceMax?: number | null;
+  maxPrice?: number | null;
 };
 type InitialStateType = {
   filter: SelectedFilterType;
@@ -19,8 +18,7 @@ const DEFAULT_FILTERS = {
   category: null,
   color: null,
   size: null,
-  priceMin: null,
-  priceMax: null,
+  maxPrice: 0,
   dressStyle: null,
 };
 

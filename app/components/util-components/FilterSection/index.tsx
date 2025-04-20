@@ -13,7 +13,7 @@ import {
   SelectedFilterType,
   setFilters,
 } from "~/store/feature/product/productSlice";
-import { MAX_PRODUCT_PRICE } from "~/constant";
+import { EE, EE_EVENTS, MAX_PRODUCT_PRICE } from "~/constant";
 
 interface OpenState {
   price: boolean;
@@ -52,7 +52,10 @@ const FilterSection = () => {
     dispatch(setFilters(newFilter));
   };
 
-  const onResetFilters = () => dispatch(resetFilters());
+  const onResetFilters = () => {
+    EE.emit(EE_EVENTS.RESET_MAX_PRICE);
+    dispatch(resetFilters());
+  };
 
   return (
     <section className="border border-[#00000010] rounded-[20px]    px-[20px] pt-[15px] pb-[40px]">
@@ -70,10 +73,14 @@ const FilterSection = () => {
           return (
             <div
               key={item?._id}
-              onClick={() =>
-                onFilterSelect({ ...selectedFilters, category: item?._id })
-              }
-              className={`flex items-center  justify-between mb-[7px] ${
+              onClick={() => {
+                if (selectedFilters.category === item?._id) {
+                  onFilterSelect({ ...selectedFilters, category: null });
+                } else {
+                  onFilterSelect({ ...selectedFilters, category: item?._id });
+                }
+              }}
+              className={`flex items-center  justify-between mb-[7px] cursor-pointer ${
                 isActive ? "text-white bg-black" : ""
               }`}
             >
@@ -102,13 +109,11 @@ const FilterSection = () => {
         {openState.price && (
           <div>
             <App_RangeSlider
-              price={[selectedFilters.priceMin!, selectedFilters.priceMax!]}
-              setPrice={(val) => {
-                console.log(val);
+              price={selectedFilters.maxPrice || 0}
+              setPrice={(price) => {
                 onFilterSelect({
                   ...selectedFilters,
-                  priceMin: val[0],
-                  priceMax: val[1],
+                  maxPrice: price,
                 });
               }}
             />
@@ -133,11 +138,15 @@ const FilterSection = () => {
               const isActive = color?._id === selectedFilters?.color;
               return (
                 <button
-                  onClick={() =>
-                    onFilterSelect({ ...selectedFilters, color: color._id })
-                  }
+                  onClick={() => {
+                    if (selectedFilters.color === color?._id) {
+                      onFilterSelect({ ...selectedFilters, color: null });
+                    } else {
+                      onFilterSelect({ ...selectedFilters, color: color._id });
+                    }
+                  }}
                   key={color?._id}
-                  className={`w-[37px] h-[37px] rounded-[37px]  ${
+                  className={`w-[37px] h-[37px] rounded-[37px] cursor-pointer  ${
                     isActive
                       ? "border-[4px] border-[#000]"
                       : "border-gray-300 border"
@@ -169,11 +178,15 @@ const FilterSection = () => {
               const isActive = selectedFilters.size === item?._id;
               return (
                 <button
-                  onClick={() =>
-                    onFilterSelect({ ...selectedFilters, size: item?._id })
-                  }
+                  onClick={() => {
+                    if (selectedFilters.size === item?._id) {
+                      onFilterSelect({ ...selectedFilters, size: null });
+                    } else {
+                      onFilterSelect({ ...selectedFilters, size: item?._id });
+                    }
+                  }}
                   key={item?._id}
-                  className={`text-[12px] text-[#00000060] bg-[#F0F0F0] px-[15px] py-[10px] rounded-[20px] ${
+                  className={`text-[12px] text-[#00000060] bg-[#F0F0F0] px-[15px] py-[10px] rounded-[20px] cursor-pointer ${
                     isActive ? "text-white bg-black" : ""
                   }`}
                 >
@@ -202,14 +215,21 @@ const FilterSection = () => {
               const isActive = selectedFilters?.dressStyle === item?._id;
               return (
                 <div
-                  onClick={() =>
-                    onFilterSelect({
-                      ...selectedFilters,
-                      dressStyle: item?._id,
-                    })
-                  }
+                  onClick={() => {
+                    if (selectedFilters.dressStyle === item?._id) {
+                      onFilterSelect({
+                        ...selectedFilters,
+                        dressStyle: null,
+                      });
+                    } else {
+                      onFilterSelect({
+                        ...selectedFilters,
+                        dressStyle: item?._id,
+                      });
+                    }
+                  }}
                   key={item?._id}
-                  className={`flex items-end  justify-between mb-[7px] ${
+                  className={`flex items-end  justify-between mb-[7px] cursor-pointer ${
                     isActive ? "text-white bg-black" : ""
                   }`}
                 >

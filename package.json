@@ -19,6 +19,7 @@
     "@stripe/stripe-js": "^7.0.0",
     "@tailwindcss/postcss": "^4.0.13",
     "axios": "^1.8.4",
+    "eventemitter3": "^5.0.1",
     "isbot": "^4.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -28,6 +29,7 @@
     "react-range-slider-input": "^3.2.1",
     "react-redux": "^9.2.0",
     "react-slick": "^0.30.3",
+    "react-slider": "^2.0.6",
     "react-spinners": "^0.15.0",
     "redux-logger": "^3.0.6",
     "slick-carousel": "^1.8.1"

@@ -18,13 +18,12 @@
 
 #price_range .range-slider__thumb {
     /* CSS for thumbs */
-
 }
 
 #price_range .range-slider__thumb[data-lower] {
     /* CSS for lower thumb */
     background-color: black;
-
+    display: none;
 }
 
 #price_range .range-slider__thumb[data-upper] {
