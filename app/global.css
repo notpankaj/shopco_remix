@@ -28,8 +28,25 @@ button {
 
 /* search filter */
 
+.common__overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s ease;
+}
+.common__overlay.open {
+  display: block;
+}
+
 /* .search__filter_container.desktop {
 } */
+
+.mobile-filter-menu-btn {
+  display: none;
+}
+
 .search__filter_container.mobile {
   display: none;
   position: fixed;
@@ -43,6 +60,9 @@ button {
   transition: transform 0.3s ease;
 }
 @media (max-width: 500px) {
+  .mobile-filter-menu-btn {
+    display: block;
+  }
   .search__filter_container.mobile {
     width: 100vw;
     transform: translateY(100%);
@@ -65,5 +85,6 @@ button {
     overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    scroll-behavior: smooth;
   }
 }

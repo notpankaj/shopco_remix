@@ -13,12 +13,14 @@ import toast from "react-hot-toast";
 import { Api_Product, ProductFilterType } from "~/api/product";
 import { useSelector } from "react-redux";
 import { RootState } from "~/store";
+import { RiListSettingsLine } from "react-icons/ri";
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedFilters = useSelector((s: RootState) => s.product.filter);
   const [loading, setLoading] = useState(false);
   const filterMobileRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   const [products, setProducts] = useState<any[]>([]);
 
@@ -39,6 +41,24 @@ const Search = () => {
     }
   };
 
+  const openMobileFilters = () => {
+    if (filterMobileRef.current?.classList.contains("open")) {
+      filterMobileRef.current?.classList.remove("open");
+      overlayRef?.current?.classList.remove("open");
+    } else {
+      filterMobileRef.current?.classList.add("open");
+      overlayRef?.current?.classList.add("open");
+    }
+  };
+  const closeMobileFilters = () => {
+    filterMobileRef.current?.classList.remove("open");
+    overlayRef?.current?.classList.remove("open");
+  };
+
+  const onGearClick = () => {
+    openMobileFilters();
+  };
+
   useEffect(() => {
     const filterObj = query_string_to_obj(searchParams) as ProductFilterType;
     // @ts-ignore
@@ -47,12 +67,13 @@ const Search = () => {
 
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen relative">
+      <div
+        className="common__overlay"
+        onClick={closeMobileFilters}
+        ref={overlayRef}
+      />
       <div className="search__filter_container mobile" ref={filterMobileRef}>
-        <FilterSection
-          onGearClick={() => {
-            filterMobileRef.current?.classList.toggle("open");
-          }}
-        />
+        <FilterSection onGearClick={openMobileFilters} />
       </div>
       <OfferAds />
       <Navbar />
@@ -68,7 +89,13 @@ const Search = () => {
                 Showing: {selectedFilters?.search}{" "}
               </h6>
             ) : (
-              <h6 className="text-[25px] font-semibold">Casual</h6>
+              <div className="flex items-center gap-[10px]">
+                <RiListSettingsLine
+                  className="text-[22px] mobile-filter-menu-btn"
+                  onClick={onGearClick}
+                />
+                <h6 className="text-[25px] font-semibold">Casual</h6>
+              </div>
             )}
             <div className="flex gap-[10px]">
               <p className="text-[#00000060] text-[12px]">

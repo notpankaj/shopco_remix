@@ -25,6 +25,7 @@ interface OpenState {
 type Props = {
   onGearClick?: () => void;
 };
+
 const FilterSection = ({ onGearClick }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const appFilters = useSelector((s: RootState) => s.app);
@@ -62,7 +63,7 @@ const FilterSection = ({ onGearClick }: Props) => {
 
   return (
     <section
-      className={`bg-white shadow-2xl border border-[#00000010] rounded-[20px] px-[20px] pt-[15px] pb-[40px] ${style.container}`}
+      className={`bg-white  border border-[#00000010] rounded-[20px] px-[20px] pt-[15px] pb-[40px] ${style.container}`}
     >
       <div className="flex items-center  justify-between ">
         <h6 className="text-[20px] font-medium">Filters</h6>
