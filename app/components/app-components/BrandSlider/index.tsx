@@ -4,6 +4,12 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import withSuspense from "~/hooks/withSuspense";
 
+import CkSvg from "/public/temp/CK.svg";
+import GUCCISvg from "/public/temp/GUCCI.svg";
+import PRADASvg from "/public/temp/PRADA.svg";
+import VERSACESvg from "/public/temp/VERSACE.svg";
+import ZaraSvg from "/public/temp/ZARA.svg";
+
 const HighlightReviews = () => {
   const settings = {
     dots: false,
@@ -33,11 +39,11 @@ const HighlightReviews = () => {
   };
 
   const brands = [
-    { id: 1, name: "Brand 1", logo: "/public/temp/CK.svg" },
-    { id: 2, name: "Brand 2", logo: "/public/temp/GUCCI.svg" },
-    { id: 3, name: "Brand 3", logo: "/public/temp/PRADA.svg" },
-    { id: 4, name: "Brand 4", logo: "/public/temp/VERSACE.svg" },
-    { id: 5, name: "Brand 5", logo: "/public/temp/ZARA.svg" },
+    { id: 1, name: "Brand 1", logo: CkSvg },
+    { id: 2, name: "Brand 2", logo: GUCCISvg },
+    { id: 3, name: "Brand 3", logo: PRADASvg },
+    { id: 4, name: "Brand 4", logo: VERSACESvg },
+    { id: 5, name: "Brand 5", logo: ZaraSvg },
   ];
 
   return (

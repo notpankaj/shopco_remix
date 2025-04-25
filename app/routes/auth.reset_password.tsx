@@ -4,11 +4,11 @@ const Index = () => {
   const naviagte = useNavigate();
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen">
-      <div className="fixed top-0 w-full bg-white">
+      <div className="fixed top-0  left-0 right-0 bg-white">
         <Navbar />
       </div>
       <div className="flex flex-row-reverse">
-        <section className="flex-1 h-[100vh] bg-[#000]"></section>
+        <section className="flex-1 h-[100vh] bg-[#000]  hidden xl:block"></section>
         <section className="flex-1 h-[100vh] flex items-center justify-center">
           <div className="w-[400px]  rounded-lg ">
             <h1 className="heading text-[52px] mb-[50px] mt-[-50px]">

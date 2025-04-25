@@ -4,9 +4,17 @@ import { GoChevronRight } from "react-icons/go";
 import App_RangeSlider from "~/components/util-components/Inputs/AppPriceRange";
 import { FaAngleUp } from "react-icons/fa";
 import Line from "../Line";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import withSuspense from "~/hooks/withSuspense";
-
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "~/store";
+import {
+  resetFilters,
+  SelectedFilterType,
+  setFilters,
+} from "~/store/feature/product/productSlice";
+import { EE, EE_EVENTS, MAX_PRODUCT_PRICE } from "~/constant";
+import style from "./index.module.css";
 interface OpenState {
   price: boolean;
   color: boolean;
@@ -14,8 +22,14 @@ interface OpenState {
   dressStyle: boolean;
 }
 
-const FilterSection = () => {
-  const [price, setPrice] = useState<[number, number]>([10, 10000]);
+type Props = {
+  onGearClick?: () => void;
+};
+
+const FilterSection = ({ onGearClick }: Props) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const appFilters = useSelector((s: RootState) => s.app);
+  const selectedFilters = useSelector((s: RootState) => s.product.filter);
   const [openState, setOpenState] = useState<OpenState>({
     price: true,
     color: true,
@@ -23,32 +37,68 @@ const FilterSection = () => {
     dressStyle: true,
   });
 
+  const isResetVisible = useMemo(() => {
+    return Object.values(selectedFilters).reduce((acc, curr) => {
+      if (acc) return true;
+      if (curr === 0 || curr === MAX_PRODUCT_PRICE) return acc;
+      if (curr) {
+        return true;
+      }
+      return false;
+    }, false);
+  }, [selectedFilters]);
+
   const toggeleOpenState = (key: keyof OpenState) => {
     setOpenState({ ...openState, [key]: !openState[key] });
   };
 
+  const onFilterSelect = (newFilter: SelectedFilterType) => {
+    dispatch(setFilters(newFilter));
+  };
+
+  const onResetFilters = () => {
+    EE.emit(EE_EVENTS.RESET_MAX_PRICE);
+    dispatch(resetFilters());
+  };
+
   return (
-    <section className="border border-[#00000010] rounded-[20px]    px-[20px] pt-[15px] pb-[40px]">
+    <section
+      className={`bg-white  border border-[#00000010] rounded-[20px] px-[20px] pt-[15px] pb-[40px] ${style.container}`}
+    >
       <div className="flex items-center  justify-between ">
         <h6 className="text-[20px] font-medium">Filters</h6>
         <button>
-          <RiListSettingsLine className="text-[22px]" />
+          <RiListSettingsLine className="text-[22px]" onClick={onGearClick} />
         </button>
       </div>
       <Line classNames="my-[15px]" />
       {/* Category */}
       <section>
-        {["T-Shirt", "Shorts", "Shirt", "Hoodie", "Jeans"].map((item) => (
-          <div
-            key={item}
-            className="flex items-center  justify-between mb-[7px]"
-          >
-            <h6 className="text-[15px] font-light opacity-70">{item}</h6>
-            <button>
-              <GoChevronRight className="text-[18px]  opacity-70" />
-            </button>
-          </div>
-        ))}
+        {appFilters?.categories?.map((item) => {
+          const isActive = item?._id === selectedFilters?.category;
+          return (
+            <div
+              key={item?._id}
+              onClick={() => {
+                if (selectedFilters.category === item?._id) {
+                  onFilterSelect({ ...selectedFilters, category: null });
+                } else {
+                  onFilterSelect({ ...selectedFilters, category: item?._id });
+                }
+              }}
+              className={`flex items-center  justify-between mb-[7px] cursor-pointer ${
+                isActive ? "text-white bg-black" : ""
+              }`}
+            >
+              <h6 className="text-[15px] font-light opacity-70">
+                {item?.name}
+              </h6>
+              <button>
+                <GoChevronRight className="text-[18px]  opacity-70" />
+              </button>
+            </div>
+          );
+        })}
       </section>
       <Line classNames="my-[20px]" />
       {/* Price */}
@@ -64,7 +114,15 @@ const FilterSection = () => {
         </div>
         {openState.price && (
           <div>
-            <App_RangeSlider price={price} setPrice={setPrice} />
+            <App_RangeSlider
+              price={selectedFilters.maxPrice || 0}
+              setPrice={(price) => {
+                onFilterSelect({
+                  ...selectedFilters,
+                  maxPrice: price,
+                });
+              }}
+            />
           </div>
         )}
       </section>
@@ -82,24 +140,25 @@ const FilterSection = () => {
         </div>
         {openState.color && (
           <div className="flex items-center gap-[10px] flex-wrap mb">
-            {[
-              "green",
-              "red",
-              "yellow",
-              "pink",
-              "orange",
-              "skyblue",
-              "blue",
-              "purple",
-              "white",
-              "black",
-            ].map((color) => {
+            {appFilters?.colors?.map((color) => {
+              const isActive = color?._id === selectedFilters?.color;
               return (
                 <button
-                  key={color}
-                  className="w-[37px] h-[37px] rounded-[37px] border-gray-300 border"
+                  onClick={() => {
+                    if (selectedFilters.color === color?._id) {
+                      onFilterSelect({ ...selectedFilters, color: null });
+                    } else {
+                      onFilterSelect({ ...selectedFilters, color: color._id });
+                    }
+                  }}
+                  key={color?._id}
+                  className={`w-[37px] h-[37px] rounded-[37px] cursor-pointer  ${
+                    isActive
+                      ? "border-[4px] border-[#000]"
+                      : "border-gray-300 border"
+                  }`}
                   style={{
-                    background: color,
+                    background: color?.code,
                   }}
                 />
               );
@@ -121,20 +180,23 @@ const FilterSection = () => {
         </div>
         {openState.size && (
           <div className="flex items-center gap-[10px] flex-wrap mb">
-            {[
-              "XX-Small",
-              "X-Small",
-              "Small",
-              "Medium",
-              "Large",
-              "X-Large",
-              "XX-Large",
-              "3X-Large",
-              "4X-Large",
-            ].map((item) => {
+            {appFilters?.sizes?.map((item) => {
+              const isActive = selectedFilters.size === item?._id;
               return (
-                <button className="text-[12px] text-[#00000060] bg-[#F0F0F0] px-[15px] py-[10px] rounded-[20px]">
-                  {item}
+                <button
+                  onClick={() => {
+                    if (selectedFilters.size === item?._id) {
+                      onFilterSelect({ ...selectedFilters, size: null });
+                    } else {
+                      onFilterSelect({ ...selectedFilters, size: item?._id });
+                    }
+                  }}
+                  key={item?._id}
+                  className={`text-[12px] text-[#00000060] bg-[#F0F0F0] px-[15px] py-[10px] rounded-[20px] cursor-pointer ${
+                    isActive ? "text-white bg-black" : ""
+                  }`}
+                >
+                  {item?.name}
                 </button>
               );
             })}
@@ -155,20 +217,48 @@ const FilterSection = () => {
         </div>
         {openState.dressStyle && (
           <div>
-            {["Casual", "Formal", "Party", "Gym"].map((item) => (
-              <div
-                key={item}
-                className="flex items-end  justify-between mb-[7px]"
-              >
-                <h6 className="text-[15px] font-light opacity-70">{item}</h6>
-                <button>
-                  <GoChevronRight className="text-[18px]  opacity-70" />
-                </button>
-              </div>
-            ))}
+            {appFilters?.dressStyle.map((item) => {
+              const isActive = selectedFilters?.dressStyle === item?._id;
+              return (
+                <div
+                  onClick={() => {
+                    if (selectedFilters.dressStyle === item?._id) {
+                      onFilterSelect({
+                        ...selectedFilters,
+                        dressStyle: null,
+                      });
+                    } else {
+                      onFilterSelect({
+                        ...selectedFilters,
+                        dressStyle: item?._id,
+                      });
+                    }
+                  }}
+                  key={item?._id}
+                  className={`flex items-end  justify-between mb-[7px] cursor-pointer ${
+                    isActive ? "text-white bg-black" : ""
+                  }`}
+                >
+                  <h6 className={`text-[15px] font-light opacity-70 `}>
+                    {item?.name}
+                  </h6>
+                  <button>
+                    <GoChevronRight className="text-[18px]  opacity-70" />
+                  </button>
+                </div>
+              );
+            })}
           </div>
         )}
       </section>
+      {isResetVisible && (
+        <button
+          onClick={onResetFilters}
+          className="bg-black h-[50px] flex items-center justify-center w-[100%] mt-[50px] mb-[-10px] rounded-[62px] text-white text-[18px]"
+        >
+          Reset
+        </button>
+      )}
     </section>
   );
 };

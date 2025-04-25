@@ -6,7 +6,7 @@ import HighlightReviews from "~/components/app-components/HighlightReviews";
 import Navbar from "~/components/app-components/Navbar";
 import NewArrivals from "~/components/app-components/NewArrivals";
 import OfferAds from "~/components/app-components/OfferAds";
-import TopSelling from "~/components/TopSelling";
+import TopSelling from "~/components/app-components/TopSelling";
 
 const Index = () => {
   return (
