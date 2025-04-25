@@ -1,4 +1,5 @@
 import styles from "./index.module.css";
+import BanerImg from "/public/temp/Bannar.png";
 const HeroSection = () => {
   return (
     <div className="flex flex-col md:flex-row  bg-[var(--bg-secondary)]">
@@ -41,10 +42,7 @@ const HeroSection = () => {
       <section>
         <div className="w-full  md:w-[50vw] h-full  md:min-h-full md:max-h-[580px] max-w-[1200px]  flex items-end ">
           {/* <div className="w-full mx-auto max-w-[590px] md:max-w-auto md:min-h-[400px] max-h-[580px] 2xl:mr-[20%] overflow-hidden flex items-end "> */}
-          <img
-            src="/public/temp/Bannar.png"
-            className=" w-[100%]  h-[100%] object-contain"
-          />
+          <img src={BanerImg} className=" w-[100%]  h-[100%] object-contain" />
           {/* </div> */}
         </div>
       </section>
