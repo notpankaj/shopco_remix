@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const BASE_URL = "http://localhost:8080";
+// export const BASE_URL = "http://localhost:8080";
+export const BASE_URL = "https://shop-co-8jvk.onrender.com";
 
 export const AxiosErrorHandler = (error: any) => {
   if (axios.isAxiosError(error)) {
