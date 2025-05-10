@@ -65,7 +65,7 @@ const HorizontalProductListWrapper = ({
       {!disableViewAll && (
         <button
           onClick={onViewAllClick}
-          className="border border-black rounded-full text-sm h-9 w-36 hover:bg-black hover:text-white transition"
+          className="mt-[20px] border border-black rounded-full text-sm h-9 w-36 hover:bg-black hover:text-white transition"
         >
           View All
         </button>

@@ -12,10 +12,10 @@ const TopSelling = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const { data } = await Api_Product.getProducts({
-        filter: { page: 1, limit: 10 },
+      const { data } = await Api_Product.getProductsNew({
+        filter: { page: 3, limit: 4 },
       });
-      setProductList(data?.products);
+      setProductList(data);
     } catch (error: any) {
       toast.error(error?.message);
     } finally {
@@ -24,7 +24,7 @@ const TopSelling = () => {
   };
 
   useEffect(() => {
-    // fetchProducts();
+    fetchProducts();
   }, []);
   return (
     <HorizontalProductListWrapper title="Top Selling">
