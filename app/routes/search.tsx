@@ -7,7 +7,7 @@ import Line from "~/components/util-components/Line";
 import ProductCard from "~/components/util-components/ProductCard";
 import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
 import FilterSection from "~/components/util-components/FilterSection";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { query_string_to_obj } from "~/utils/query_string_to_obj";
 import toast from "react-hot-toast";
 import { Api_Product, ProductFilterType } from "~/api/product";
@@ -16,30 +16,14 @@ import { RootState } from "~/store";
 import { RiListSettingsLine } from "react-icons/ri";
 
 const Search = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const selectedFilters = useSelector((s: RootState) => s.product.filter);
-  const [loading, setLoading] = useState(false);
   const filterMobileRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [products, setProducts] = useState<any[]>([]);
-
-  const fetchProducts = async (filter: ProductFilterType) => {
-    try {
-      setLoading(true);
-      // const { data } = await Api_Product.getProducts({ filter });
-      // console.log(data, "here");
-      // setProducts(data.products);
-      const data = await Api_Product.getProductsNew({ filter });
-      console.log(data, "here");
-      setProducts(data.data);
-    } catch (error: any) {
-      console.log(error);
-      toast.error(error?.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const openMobileFilters = () => {
     if (filterMobileRef.current?.classList.contains("open")) {
@@ -59,11 +43,45 @@ const Search = () => {
     openMobileFilters();
   };
 
+  const fetchProducts = async (filter: ProductFilterType) => {
+    console.warn("fetchProducts()");
+    try {
+      setLoading(true);
+      // const { data } = await Api_Product.getProducts({ filter });
+      // console.log(data, "here");
+      // setProducts(data.products);
+      const data = await Api_Product.getProductsNew({ filter });
+      console.log(data, "here");
+      setProducts(data.data);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // useEffect(() => {
+  //   const filterObj = query_string_to_obj(searchParams) as ProductFilterType;
+  //   // @ts-ignore
+  //   fetchProducts({ ...filterObj, ...selectedFilters });
+  // }, [selectedFilters]);
+
+  const onNextClick = () => {
+    setSearchParams({
+      q: "abc",
+      s: Math.random().toString(),
+    });
+  };
+
   useEffect(() => {
-    const filterObj = query_string_to_obj(searchParams) as ProductFilterType;
+    console.log("lll");
+    const s = searchParams.get("s");
+    const q = searchParams.get("q");
+    console.log({ s, q });
     // @ts-ignore
-    fetchProducts({ ...filterObj, ...selectedFilters });
-  }, [selectedFilters]);
+    fetchProducts({ ...selectedFilters, search: s || "" });
+  }, [searchParams]);
 
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen relative">
@@ -110,17 +128,22 @@ const Search = () => {
           {/* products */}
           <div className="flex flex-wrap gap-[20px]">
             {products.map((product, idx) => {
-              return <ProductCard key={`${product?._id}`} product={product} />;
+              return (
+                <ProductCard key={`${idx + product?._id}`} product={product} />
+              );
             })}
           </div>
           <Line classNames="my-[50px]" />
           {/* Pagination */}
-          <div className=" flex items-center  gap-[10px]">
-            <button className="h-[40px] border border-[#00000010] rounded-[8px] px-[20px] text-[14px] flex items-center justify-evenly  gap-[10px]">
+          <div className=" flex items-center  gap-[10px] justify-center">
+            <button
+              disabled={page <= 1}
+              className={`h-[40px] border border-[#00000010] rounded-[8px] px-[20px] text-[14px] flex items-center justify-evenly  gap-[10px]`}
+            >
               <GrLinkPrevious />
               Previous
             </button>
-            <section className="flex-1 flex items-center justify-center gap-[10px]">
+            {/* <section className="flex-1 flex items-center justify-center gap-[10px]">
               {[1, 2, 3, "...", 8, 9, 10].map((item) => {
                 const isActive = item === 1;
                 return (
@@ -136,8 +159,11 @@ const Search = () => {
                   </button>
                 );
               })}
-            </section>
-            <button className="h-[40px] border border-[#00000010] rounded-[8px] px-[20px] text-[14px] flex items-center justify-evenly  gap-[10px]">
+            </section> */}
+            <button
+              onClick={onNextClick}
+              className="h-[40px] border border-[#00000010] rounded-[8px] px-[20px] text-[14px] flex items-center justify-evenly  gap-[10px]"
+            >
               <GrLinkNext />
               Next
             </button>
