@@ -192,6 +192,8 @@ const Products = () => {
               </div>
               <p className="text-gray-500 text-[12px] mt-[10px]">
                 {product?.description}
+                <br />
+                <i className="text-xl"> {activeVariant?._id}</i>
               </p>
             </div>
 

@@ -50,7 +50,9 @@ const Search = () => {
       // const { data } = await Api_Product.getProducts({ filter });
       // console.log(data, "here");
       // setProducts(data.products);
-      const data = await Api_Product.getProductsNew({ filter });
+      const data = await Api_Product.getProductsNew({
+        filter: { ...filter, limit: 9999999999 },
+      });
       console.log(data, "here");
       setProducts(data.data);
     } catch (error: any) {
@@ -61,27 +63,13 @@ const Search = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const filterObj = query_string_to_obj(searchParams) as ProductFilterType;
-  //   // @ts-ignore
-  //   fetchProducts({ ...filterObj, ...selectedFilters });
-  // }, [selectedFilters]);
-
-  const onNextClick = () => {
-    setSearchParams({
-      q: "abc",
-      s: Math.random().toString(),
-    });
-  };
+  const onNextClick = () => {};
 
   useEffect(() => {
-    console.log("lll");
     const s = searchParams.get("s");
-    const q = searchParams.get("q");
-    console.log({ s, q });
     // @ts-ignore
     fetchProducts({ ...selectedFilters, search: s || "" });
-  }, [searchParams]);
+  }, [searchParams, selectedFilters]);
 
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen relative">

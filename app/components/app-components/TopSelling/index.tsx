@@ -1,3 +1,4 @@
+import { useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Api_Product } from "~/api/product";
@@ -8,6 +9,7 @@ import { Product } from "~/types/Product";
 const TopSelling = () => {
   const [productList, setProductList] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const fetchProducts = async () => {
     try {
@@ -27,7 +29,10 @@ const TopSelling = () => {
     fetchProducts();
   }, []);
   return (
-    <HorizontalProductListWrapper title="Top Selling">
+    <HorizontalProductListWrapper
+      title="Top Selling"
+      onViewAllClick={() => navigate("/search")}
+    >
       {productList?.map((product: any, index: number) => {
         return <ProductCard key={index} product={product} />;
       })}
