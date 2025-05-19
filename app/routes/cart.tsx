@@ -125,12 +125,15 @@ const Index = () => {
   }, [cartItems]);
 
   const onCheckout = async () => {
+    console.log(window.location.host);
+    console.log(this);
+    return;
     try {
       const stripe = await loadStripe(STRIPE_PK);
       const body = {
         products: cartItems,
-        success_url: STRIPE_SUCCESS_URL,
-        cancel_url: STRIPE_CANCEL_URL,
+        success_url: STRIPE_SUCCESS_URL(window.location.host || ""),
+        cancel_url: STRIPE_CANCEL_URL(window.location.host || ""),
       };
       const headers = {
         "Content-Type": "application/json",
