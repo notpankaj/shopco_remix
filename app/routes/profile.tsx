@@ -123,6 +123,17 @@ export default function Profile() {
             </Select>
           </div>
 
+          <div className="px-[10px] py-[5px] flex flex-col items-start">
+            <span className="opacity-50 text-sm ml-[5px] mb-[2px]">
+              Address :
+            </span>
+            <button
+              onClick={() => navigate("/addresses")}
+              className="bg-blue-300 px-4 py-2 rounded-2xl"
+            >
+              <p className="text-xs">Manage Address</p>
+            </button>
+          </div>
           {isEditMode ? (
             <Button variant="outline" className="w-[200px] mx-auto mt-[20px]">
               UPDATE PROFILE
