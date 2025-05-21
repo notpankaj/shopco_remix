@@ -1,64 +1,26 @@
 import { useNavigate } from "@remix-run/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "~/components/app-components/Navbar";
 import OfferAds from "~/components/app-components/OfferAds";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { AppDispatch, RootState } from "~/store";
 import { logOut } from "~/store/feature/auth/authSlice";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
-import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
 import { MdEdit } from "react-icons/md";
-import { RiDeleteBin6Line } from "react-icons/ri"; // Importing Delete icon
-import { IoClose } from "react-icons/io5";
-
-// Define the type for address objects
-type Address = {
-  type: string;
-  name: string;
-  phone: string;
-  address: string;
-};
-
-// Array of addresses
-const addresses: Address[] = [
-  {
-    type: "HOME",
-    name: "Amit Kumar",
-    phone: "7009955875",
-    address: "House no 137, Sector 9B, Chandigarh, Chandigarh - 160009",
-  },
-  {
-    type: "HOME",
-    name: "Pankaj",
-    phone: "7986674418",
-    address:
-      "72, sector 2B, Chandigarh, Sector 2B Chandigarh, Chandigarh, Chandigarh - 160011",
-  },
-  {
-    type: "WORK",
-    name: "Pankaj",
-    phone: "7986674418",
-    address:
-      "Axel Business Centre, 11th floor, Sector 118, Sahibzada Ajit Singh (SAS) Nagar, Mohali, Chandigarh, Chandigarh - 160055",
-  },
-];
+import { RiDeleteBin6Line } from "react-icons/ri";
+import axios from "axios";
+import { BASE_URL } from "~/api";
 
 export default function Addresses() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((s: RootState) => s.auth.user);
+  const token = useSelector((s: RootState) => s.auth.token);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<any>(user);
   const [isEditMode, setIsEditMode] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [addresses, setAddresses] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>(
     "https://github.com/shadcn.png"
   );
@@ -88,6 +50,32 @@ export default function Addresses() {
     navigate("/");
   };
 
+  const fetchAddresses = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${BASE_URL}/api/v1/address`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(res);
+
+      if (res?.data?.data?.length) {
+        setAddresses(res?.data?.data);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchAddresses();
+    }
+  }, [token]);
+
   if (user === null) {
     return <h1 className="heading text-[22px]">Loading...</h1>;
   }
@@ -101,7 +89,13 @@ export default function Addresses() {
           <div className="max-w-2xl mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Manage Addresses</h1>
 
-            <button className="flex items-center text-blue-400 hover:text-blue-400 mb-6">
+            <button
+              onClick={() => {
+                console.log("asd");
+                navigate("/address/create");
+              }}
+              className="flex items-center text-blue-400 hover:text-blue-400 mb-6"
+            >
               <svg
                 className="w-5 h-5 mr-1"
                 fill="none"
@@ -119,32 +113,37 @@ export default function Addresses() {
               ADD A NEW ADDRESS
             </button>
 
+            {loading ? <span>Loading</span> : null}
             <div className="space-y-4">
-              {addresses.map((addr, index) => (
-                <div
-                  key={index}
-                  className="bg-white p-4 rounded-lg shadow flex justify-between items-start"
-                >
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">
-                        {addr.type}
-                      </span>
-                      <h2 className="font-semibold">{addr.name}</h2>
-                      <span className="text-gray-600">{addr.phone}</span>
+              {addresses?.length ? (
+                addresses.map((addr: any, index) => (
+                  <div
+                    key={index}
+                    className="bg-white p-4 rounded-lg shadow flex justify-between items-start"
+                  >
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">
+                          {addr.addressType}
+                        </span>
+                        <h2 className="font-semibold">{addr.name}</h2>
+                        <span className="text-gray-600">{addr.phone}</span>
+                      </div>
+                      <p className="text-gray-600 mt-1">{addr.address}</p>
                     </div>
-                    <p className="text-gray-600 mt-1">{addr.address}</p>
+                    <div className="flex space-x-2">
+                      <button className="text-gray-500 hover:text-blue-600">
+                        <MdEdit className="w-5 h-5" />
+                      </button>
+                      <button className="text-gray-500 hover:text-red-600">
+                        <RiDeleteBin6Line className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex space-x-2">
-                    <button className="text-gray-500 hover:text-blue-600">
-                      <MdEdit className="w-5 h-5" />
-                    </button>
-                    <button className="text-gray-500 hover:text-red-600">
-                      <RiDeleteBin6Line className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <span>No Address!</span>
+              )}
             </div>
           </div>
         </div>

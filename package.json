@@ -25,6 +25,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "eventemitter3": "^5.0.1",
+    "formik": "^2.4.6",
     "isbot": "^4.1.0",
     "lucide-react": "^0.511.0",
     "react": "^18.2.0",
@@ -39,7 +40,8 @@
     "react-spinners": "^0.15.0",
     "redux-logger": "^3.0.6",
     "slick-carousel": "^1.8.1",
-    "tailwind-merge": "^3.3.0"
+    "tailwind-merge": "^3.3.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.16.0",
