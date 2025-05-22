@@ -12,7 +12,7 @@ import {
 } from "~/components/ui/select";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -64,8 +64,8 @@ export default function Addresses() {
   const user = useSelector((s: RootState) => s.auth.user);
   const token = useSelector((s: RootState) => s.auth.token);
 
-  // Initial form state
-  const initialFormState: Address = {
+  // State to hold form initial values
+  const [initialFormState, setInitialFormState] = useState<Address>({
     address: "",
     phone: "",
     name: "",
@@ -76,37 +76,61 @@ export default function Addresses() {
     landmark: "",
     alternatePhone: "",
     type: "Home",
-  };
+  });
 
   // Fetch address data for edit mode
   useEffect(() => {
     if (isEdit) {
       const fetchAddress = async () => {
         try {
-          const response = await axios.get(`/api/v1/address/${addressId}`);
-          // Set form data with response.data
+          const response = await axios.get(
+            `${BASE_URL}/api/v1/address/${addressId}`,
+            {
+              headers: { Authorization: token },
+            }
+          );
+          const addressObj = response?.data?.data;
+          console.log({ addressObj });
+
+          // Map addressObj to form initial values
+          setInitialFormState({
+            address: addressObj.address || "",
+            phone: addressObj.phone || "",
+            name: addressObj.name || "",
+            city: addressObj.city || "",
+            state: addressObj.state || "",
+            pincode: addressObj.pincode || "",
+            locality: addressObj.locality || "",
+            landmark: addressObj.landmark || "",
+            alternatePhone: addressObj.alternatePhone || "",
+            type: addressObj.addressType === "home" ? "Home" : "Work",
+          });
         } catch (error) {
           console.error("Error fetching address:", error);
         }
       };
       fetchAddress();
     }
-  }, [addressId, isEdit]);
+  }, [addressId, isEdit, token]);
 
   const handleSubmit = async (
     values: Address,
     { setSubmitting, resetForm }: any
   ) => {
     try {
+      const payload = {
+        ...values,
+        addressType: values.type.toLowerCase(), // Map type to addressType for API
+      };
       if (isEdit) {
         // Update address
-        await axios.put(`${BASE_URL}/api/v1/address/${addressId}`, values);
+        await axios.put(`${BASE_URL}/api/v1/address/${addressId}`, payload, {
+          headers: { Authorization: token },
+        });
       } else {
         // Add new address
-        await axios.post(`${BASE_URL}/api/v1/address`, values, {
-          headers: {
-            Authorization: token,
-          },
+        await axios.post(`${BASE_URL}/api/v1/address`, payload, {
+          headers: { Authorization: token },
         });
       }
       resetForm();
@@ -139,6 +163,7 @@ export default function Addresses() {
                 initialValues={initialFormState}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
+                enableReinitialize // Allow form to reinitialize when initialFormState changes
               >
                 {({ isSubmitting, values, setFieldValue }) => (
                   <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">

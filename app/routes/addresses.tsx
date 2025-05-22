@@ -1,54 +1,24 @@
 import { useNavigate } from "@remix-run/react";
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import Navbar from "~/components/app-components/Navbar";
 import OfferAds from "~/components/app-components/OfferAds";
-import { AppDispatch, RootState } from "~/store";
-import { logOut } from "~/store/feature/auth/authSlice";
+import { RootState } from "~/store";
 import { MdEdit } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import axios from "axios";
 import { BASE_URL } from "~/api";
+import toast from "react-hot-toast";
+import { Loader } from "~/components/util-components/Loader";
 
 export default function Addresses() {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
   const user = useSelector((s: RootState) => s.auth.user);
   const token = useSelector((s: RootState) => s.auth.token);
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState<any>(user);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [addresses, setAddresses] = useState([]);
+  const [deletingIndex, setDeletingIndex] = useState(-1);
   const [loading, setLoading] = useState(false);
-  const [previewImage, setPreviewImage] = useState<string>(
-    "https://github.com/shadcn.png"
-  );
-
-  const handleImageClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setPreviewImage(imageUrl);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleEdit = () => {
-    setIsEditing(!isEditing);
-  };
-
-  const onLogoutClick = () => {
-    dispatch(logOut());
-    navigate("/");
-  };
 
   const fetchAddresses = async () => {
     try {
@@ -58,15 +28,37 @@ export default function Addresses() {
           Authorization: token,
         },
       });
-      console.log(res);
 
       if (res?.data?.data?.length) {
         setAddresses(res?.data?.data);
+      } else {
+        setAddresses([]);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      toast.error(error?.response?.data?.message || "Something went wrong!");
     } finally {
       setLoading(false);
+    }
+  };
+  const handleDelete = async (addressId: string, index: number) => {
+    try {
+      setDeletingIndex(index);
+      const res = await axios.delete(
+        `${BASE_URL}/api/v1/address/${addressId}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      toast.success("Address Deleted!");
+      fetchAddresses();
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error?.response?.data?.message || "Something went wrong!");
+    } finally {
+      setDeletingIndex(-1);
     }
   };
 
@@ -132,11 +124,21 @@ export default function Addresses() {
                       <p className="text-gray-600 mt-1">{addr.address}</p>
                     </div>
                     <div className="flex space-x-2">
-                      <button className="text-gray-500 hover:text-blue-600">
+                      <button
+                        onClick={() => navigate(`/address/${addr?._id}`)}
+                        className="text-gray-500 hover:text-blue-600"
+                      >
                         <MdEdit className="w-5 h-5" />
                       </button>
-                      <button className="text-gray-500 hover:text-red-600">
-                        <RiDeleteBin6Line className="w-5 h-5" />
+                      <button
+                        onClick={() => handleDelete(addr?._id, index)}
+                        className="text-gray-500 hover:text-red-600"
+                      >
+                        {deletingIndex === index ? (
+                          <Loader scale={0.5} />
+                        ) : (
+                          <RiDeleteBin6Line className="w-5 h-5" />
+                        )}
                       </button>
                     </div>
                   </div>
