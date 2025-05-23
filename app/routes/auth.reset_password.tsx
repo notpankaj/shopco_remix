@@ -1,5 +1,7 @@
 import { Form, useNavigate } from "@remix-run/react";
 import Navbar from "~/components/app-components/Navbar";
+import Photo from "../../public/temp/photo_2.jpg";
+
 const Index = () => {
   const naviagte = useNavigate();
   return (
@@ -8,7 +10,9 @@ const Index = () => {
         <Navbar />
       </div>
       <div className="flex flex-row-reverse">
-        <section className="flex-1 h-[100vh] bg-[#000]  hidden xl:block"></section>
+        <section className="flex-1 h-[100vh] bg-[#000]  hidden xl:block ">
+          <img src={Photo} className="w-[100%] h-[100%] object-cover" />
+        </section>
         <section className="flex-1 h-[100vh] flex items-center justify-center">
           <div className="w-[400px]  rounded-lg ">
             <h1 className="heading text-[52px] mb-[50px] mt-[-50px]">

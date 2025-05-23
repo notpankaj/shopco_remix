@@ -8,7 +8,7 @@ import useNoAuthRoutes from "~/hooks/useNoAuthRoutes";
 import { AppDispatch } from "~/store";
 import { setAuth } from "~/store/feature/auth/authSlice";
 // import Loader from "~/components/util-components/Loader";
-
+import Photo from "../../public/temp/photo_3.avif";
 const Index = () => {
   useNoAuthRoutes();
   const naviagte = useNavigate();
@@ -42,7 +42,9 @@ const Index = () => {
         <Navbar />
       </div>
       <div className="flex">
-        <section className="flex-1 h-[100vh] bg-[#000]  hidden xl:block"></section>
+        <section className="flex-1 h-[100vh] bg-[#000]  hidden xl:block ">
+          <img src={Photo} className="w-[100%] h-[100%] object-cover " />
+        </section>
         <section className="flex-1 h-[100vh] flex items-center justify-center">
           <div className="w-[400px]  rounded-lg ">
             <h1 className="heading text-[52px] mb-[50px] mt-[-50px]">
