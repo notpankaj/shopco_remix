@@ -182,6 +182,8 @@ const Index = () => {
       console.log(res);
       if (res?.data?.data?.length) {
         setAddresses({ data: res?.data?.data, loading: false });
+      } else {
+        setAddresses({ data: [], loading: false });
       }
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Something went wrong!");
@@ -268,7 +270,11 @@ const Index = () => {
               ) : (
                 <button
                   onClick={() => {
-                    navigate("/address/create");
+                    if (token) {
+                      navigate("/address/create");
+                    } else {
+                      navigate("/auth/login");
+                    }
                   }}
                   className="text-white text-[12px] h-[40px] px-[20px] bg-black rounded-[62px] flex items-center justify-center gap-[10px] w-[100%] mt-[15px]"
                 >
