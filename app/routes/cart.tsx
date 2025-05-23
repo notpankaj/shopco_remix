@@ -145,8 +145,8 @@ const Index = () => {
       const stripe = await loadStripe(STRIPE_PK);
       const body = {
         products: cartItems,
-        success_url: STRIPE_SUCCESS_URL(window.location.host || ""),
-        cancel_url: STRIPE_CANCEL_URL(window.location.host || ""),
+        success_url: STRIPE_SUCCESS_URL(window.location.origin || ""),
+        cancel_url: STRIPE_CANCEL_URL(window.location.origin || ""),
       };
       const headers = {
         "Content-Type": "application/json",
