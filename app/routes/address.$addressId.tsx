@@ -134,7 +134,8 @@ export default function Addresses() {
         });
       }
       resetForm();
-      navigate("/addresses");
+      // navigate("/addresses");
+      navigate(-1);
     } catch (error) {
       console.error("Error saving address:", error);
     } finally {
@@ -143,7 +144,8 @@ export default function Addresses() {
   };
 
   const handleCancel = () => {
-    navigate("/addresses");
+    // navigate("/addresses");
+    navigate(-1);
   };
 
   if (user === null) {

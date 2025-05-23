@@ -18,6 +18,11 @@ import { price_formater } from "~/utils/price_formater";
 import { loadStripe } from "@stripe/stripe-js";
 import { STRIPE_CANCEL_URL, STRIPE_PK, STRIPE_SUCCESS_URL } from "~/constant";
 import { BASE_URL } from "~/api";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useNavigate } from "@remix-run/react";
+import { makeAddressString } from "~/utils/makeAddressString";
+import { Field } from "formik";
 
 const CartItem = ({
   hideLine = false,
@@ -109,7 +114,14 @@ const CartItem = ({
 
 const DELVERY_FEE = 15;
 const Index = () => {
+  const navigate = useNavigate();
   const cartItems = useSelector((s: RootState) => s.cart.items);
+  const token = useSelector((s: RootState) => s.auth.token);
+  const [selectedAddress, setSelectedAddress] = useState("");
+  const [addresses, setAddresses] = useState({
+    loading: false,
+    data: [],
+  });
   const memoValue = useMemo(() => {
     return cartItems.reduce(
       (acc, curr) => {
@@ -125,9 +137,10 @@ const Index = () => {
   }, [cartItems]);
 
   const onCheckout = async () => {
-    console.log(window.location.host);
-    console.log(this);
-    return;
+    if (!selectedAddress) {
+      toast("Please Select Address!");
+      return;
+    }
     try {
       const stripe = await loadStripe(STRIPE_PK);
       const body = {
@@ -160,6 +173,28 @@ const Index = () => {
     }
   };
 
+  const fetchAddresses = async () => {
+    try {
+      setAddresses({ data: [], loading: true });
+      const res = await axios.get(`${BASE_URL}/api/v1/address`, {
+        headers: { Authorization: token },
+      });
+      console.log(res);
+      if (res?.data?.data?.length) {
+        setAddresses({ data: res?.data?.data, loading: false });
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Something went wrong!");
+      setAddresses({ data: [], loading: false });
+    }
+  };
+  useEffect(() => {
+    if (!token) return;
+    fetchAddresses();
+  }, [token]);
+
+  console.log(addresses, "addresses");
+
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen">
       <OfferAds />
@@ -178,62 +213,144 @@ const Index = () => {
               );
             })}
           </section>
-          <section className="sticky top-[20px] max-w-[500px] flex-1 border border-[#00000010] rounded-[20px] p-[20px] mx-auto w-[100%]">
-            <h5 className="text-[16px] font-medium">Order Summary</h5>
 
-            <div className="flex flex-col gap-[10px] mt-[20px]">
-              <div className="flex items-baseline justify-between">
-                <span className="text-[12px] text-[#00000070] font-light">
-                  Subtotal
-                </span>
-                <span className="text-[12px]">
-                  $ {price_formater(memoValue?.total)}
-                </span>
-              </div>
-              <div className="flex items-baseline justify-between">
-                <span className="text-[12px] text-[#00000070] font-light">
-                  Discount (-20%)
-                </span>
-                <span className="text-[12px] text-red-400">
-                  -${" "}
-                  {price_formater(
-                    Number(
-                      (
-                        memoValue.total -
-                        getDiscountedPrice(memoValue?.total, 20)
-                      ).toFixed(2)
-                    )
-                  )}
-                </span>
-              </div>
-              <div className="flex items-baseline justify-between">
-                <span className="text-[12px] text-[#00000070] font-light">
-                  Delivery Fee
-                </span>
-                <span className="text-[12px]">${DELVERY_FEE}</span>
-              </div>
-              <Line />
-              <div className="flex items-baseline justify-between">
-                <span className="text-[12px] text-[#00000070] font-light">
-                  Total
-                </span>
-                <span className="text-[12px]">
-                  ${" "}
-                  {cartItems.length
-                    ? price_formater(
-                        Number(getDiscountedPrice(memoValue?.total, 20)) - 15
+          <section className="sticky top-[20px] w-[100%]  lg:max-w-[500px] ">
+            {/* Address */}
+            <section className="min-w-[400px] flex-1 border border-[#00000010] rounded-[20px] p-[20px] mx-auto w-[100%]">
+              <h5 className="text-[16px] font-medium">Addresses</h5>
+              {addresses?.loading ? (
+                <span>Loading...</span>
+              ) : addresses?.data?.length ? (
+                <>
+                  {addresses?.data?.map((addr: any, index: number) => {
+                    const isFirstItem = index === 0;
+                    const isSelected = selectedAddress === addr?._id;
+                    return (
+                      <div
+                        key={addr?._id}
+                        onClick={() => setSelectedAddress(addr?._id)}
+                        className="flex flex-col gap-[10px] mt-[10px] cursor-pointer"
+                      >
+                        {isFirstItem || <Line />}
+
+                        <div className="flex items-center gap-[5px] ">
+                          <div
+                            className={`w-[15px] h-[15px]  rounded-full flex items-center justify-center ${
+                              isSelected
+                                ? "border-blue-500 border-2"
+                                : "border-gray-500 border-2"
+                            } `}
+                          >
+                            {isSelected ? (
+                              <div
+                                className={`w-[8px] h-[8px] bg-blue-500 rounded-full`}
+                              />
+                            ) : null}
+                          </div>
+                          <span className="text-[12px] text-[#00000070] font-light">
+                            {makeAddressString(addr)}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </>
+              ) : (
+                <>
+                  <span className="text-gray-500 text-sm">
+                    {" "}
+                    No Address Added yet!
+                  </span>
+                </>
+              )}
+              {addresses?.data?.length ? (
+                <></>
+              ) : (
+                <button
+                  onClick={() => {
+                    navigate("/address/create");
+                  }}
+                  className="text-white text-[12px] h-[40px] px-[20px] bg-black rounded-[62px] flex items-center justify-center gap-[10px] w-[100%] mt-[15px]"
+                >
+                  <div className="flex items-center text-white hover:text-white my-6">
+                    <svg
+                      className="w-5 h-5 mr-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                    ADD A NEW ADDRESS
+                  </div>
+                </button>
+              )}
+            </section>
+
+            {/* Checkout */}
+            <section className="mt-[20px] min-w-[400px] flex-1 border border-[#00000010] rounded-[20px] p-[20px] mx-auto w-[100%]">
+              <h5 className="text-[16px] font-medium">Order Summary</h5>
+
+              <div className="flex flex-col gap-[10px] mt-[20px]">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-[12px] text-[#00000070] font-light">
+                    Subtotal
+                  </span>
+                  <span className="text-[12px]">
+                    $ {price_formater(memoValue?.total)}
+                  </span>
+                </div>
+                <div className="flex items-baseline justify-between">
+                  <span className="text-[12px] text-[#00000070] font-light">
+                    Discount (-20%)
+                  </span>
+                  <span className="text-[12px] text-red-400">
+                    -${" "}
+                    {price_formater(
+                      Number(
+                        (
+                          memoValue.total -
+                          getDiscountedPrice(memoValue?.total, 20)
+                        ).toFixed(2)
                       )
-                    : 0}
-                </span>
+                    )}
+                  </span>
+                </div>
+                <div className="flex items-baseline justify-between">
+                  <span className="text-[12px] text-[#00000070] font-light">
+                    Delivery Fee
+                  </span>
+                  <span className="text-[12px]">${DELVERY_FEE}</span>
+                </div>
+                <Line />
+                <div className="flex items-baseline justify-between">
+                  <span className="text-[12px] text-[#00000070] font-light">
+                    Total
+                  </span>
+                  <span className="text-[12px]">
+                    ${" "}
+                    {cartItems.length
+                      ? price_formater(
+                          Number(getDiscountedPrice(memoValue?.total, 20)) - 15
+                        )
+                      : 0}
+                  </span>
+                </div>
               </div>
-            </div>
 
-            <button
-              onClick={onCheckout}
-              className="text-white text-[12px] h-[40px] px-[20px] bg-black rounded-[62px] flex items-center justify-center gap-[10px] w-[100%] mt-[15px]"
-            >
-              Go to Checkout <GrFormNextLink color="white" size={22} />
-            </button>
+              <button
+                onClick={onCheckout}
+                className="text-white text-[12px] h-[40px] px-[20px] bg-black rounded-[62px] flex items-center justify-center gap-[10px] w-[100%] mt-[15px]"
+              >
+                Go to Checkout <GrFormNextLink color="white" size={22} />
+              </button>
+            </section>
           </section>
         </div>
       </div>
