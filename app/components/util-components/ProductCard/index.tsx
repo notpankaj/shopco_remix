@@ -28,7 +28,7 @@ const ProductCard = ({ product }: any) => {
         </div>
         <div className="mt-[5px] flex items-center ">
           <span className="inline-block text-[14px] md:text-[20px] md:font-medium">
-            ${price || "0.00"}
+            ₹{price || "0.00"}
           </span>
           {price && (
             <span className="inline-block text-[14px] md:text-[20px] md:font-medium opacity-50 ml-[10px]">

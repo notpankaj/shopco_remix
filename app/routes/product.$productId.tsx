@@ -178,7 +178,7 @@ const Products = () => {
 
             <div className="info border-gray-200 border-b-t border-b pb-[20px] mt-[10px]">
               <div className="flex items-center gap-[10px]">
-                <p className="text-[16px] font-medium">$ {price}</p>
+                <p className="text-[16px] font-medium">₹ {price}</p>
                 {price && (
                   <p className="text-[16px] font-medium opacity-40">
                     $ {discountPrice}
@@ -193,7 +193,7 @@ const Products = () => {
               <p className="text-gray-500 text-[12px] mt-[10px]">
                 {product?.description}
                 <br />
-                <i className="text-xl"> {activeVariant?._id}</i>
+                {/* <i className="text-xl"> {activeVariant?._id}</i> */}
               </p>
             </div>
 
